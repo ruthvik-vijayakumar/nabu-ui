@@ -1,242 +1,453 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <!-- Header -->
-    <div class="bg-white border-b border-gray-200 px-4 py-3">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-          <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-            <span class="text-white font-bold text-sm">N</span>
+  <div class="dark min-h-screen bg-background text-foreground">
+    <!-- Hero -->
+    <div class="relative overflow-hidden border-b border-border bg-card">
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div class="max-w-3xl">
+            <p class="text-xs font-semibold tracking-[0.4em] text-muted-foreground uppercase">Workspace</p>
+            <h1 class="mt-3 text-3xl sm:text-4xl font-semibold text-foreground">{{ workspaceTitle }}</h1>
+            <p class="mt-3 text-sm sm:text-base text-muted-foreground">
+              Operate your AI research companions in one elegant view. Track shared knowledge, collaborate with teammates, and jump into context-aware chats instantly.
+            </p>
+            <div class="mt-5 flex flex-wrap gap-6 text-sm text-muted-foreground">
+              <div class="flex items-center gap-2">
+                <span class="text-2xl font-semibold text-foreground">{{ scribeStats.total }}</span>
+                <span>Total scribes</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-2xl font-semibold text-foreground">{{ scribeStats.shared }}</span>
+                <span>Shared with you</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-2xl font-semibold text-foreground">{{ scribeStats.totalDocuments }}</span>
+                <span>Documents saved</span>
+              </div>
+            </div>
           </div>
-          <div>
-            <h1 class="text-lg font-semibold text-gray-900">NabuAI Dashboard</h1>
-            <p class="text-sm text-gray-500">Your saved content</p>
+          <div class="flex flex-wrap items-center gap-3">
+            <Button
+              variant="outline"
+              @click="handleLogout"
+              title="Logout"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+              Logout
+            </Button>
+            <Button
+              variant="outline"
+              @click="exportData"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              Export
+            </Button>
+            <Button
+              @click="showCreateModal = true"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              Create Scribe
+            </Button>
           </div>
         </div>
-        <button
-          @click="$emit('back')"
-          class="text-gray-400 hover:text-gray-600"
-        >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
+
       </div>
     </div>
 
-    <!-- Stats -->
-    <div class="p-4">
-      <div class="grid grid-cols-5 gap-4 mb-6">
-        <div class="bg-white rounded-lg p-4 text-center">
-          <div class="text-2xl font-bold text-primary-600">{{ stats.totalItems }}</div>
-          <div class="text-sm text-gray-500">Total Items</div>
-        </div>
-        <div class="bg-white rounded-lg p-4 text-center">
-          <div class="text-2xl font-bold text-green-600">{{ stats.byType.page || 0 }}</div>
-          <div class="text-sm text-gray-500">Pages</div>
-        </div>
-        <div class="bg-white rounded-lg p-4 text-center">
-          <div class="text-2xl font-bold text-blue-600">{{ stats.byType.text || 0 }}</div>
-          <div class="text-sm text-gray-500">Text</div>
-        </div>
-        <div class="bg-white rounded-lg p-4 text-center">
-          <div class="text-2xl font-bold text-purple-600">{{ stats.byType.screenshot || 0 }}</div>
-          <div class="text-sm text-gray-500">Screenshots</div>
-        </div>
-        <div class="bg-white rounded-lg p-4 text-center">
-          <div class="text-2xl font-bold text-red-600">{{ stats.byType.pdf || 0 }}</div>
-          <div class="text-sm text-gray-500">PDFs</div>
-        </div>
-      </div>
-
-      <!-- Search -->
-      <div class="bg-white rounded-lg border border-gray-200 p-4 mb-4">
-        <div class="flex space-x-2">
-          <input
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+      <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div class="relative flex-1">
+          <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 z-10">
+            <svg class="h-4 w-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </div>
+          <Input
             v-model="searchQuery"
             type="text"
-            placeholder="Search saved content..."
-            class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            placeholder="Search scribes, domains or collaborators..."
+            class="pl-10"
           />
-          <button
-            @click="searchContent"
-            class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <Button
+            v-for="option in filterOptions"
+            :key="option.value"
+            @click="handleFilterChange(option.value)"
+            :variant="filterMode === option.value ? 'default' : 'ghost'"
+            size="sm"
+            class="relative"
           >
-            Search
-          </button>
+            {{ option.label }}
+            <Badge 
+              :variant="filterMode === option.value ? 'secondary' : 'outline'"
+              class="ml-2 h-5 px-1.5 text-[10px]"
+            >
+              {{ filterCounts[option.value] }}
+            </Badge>
+          </Button>
         </div>
       </div>
 
-      <!-- Content List -->
-      <div class="space-y-3">
-        <div
-          v-for="item in filteredContent"
-          :key="item.id"
-          class="bg-white rounded-lg border border-gray-200 p-4"
-        >
-          <div class="flex items-start justify-between">
-            <div class="flex-1">
-              <div class="flex items-center space-x-2 mb-2">
-                <span class="px-2 py-1 text-xs font-medium rounded-full"
-                      :class="getTypeBadgeClass(item.type)">
-                  {{ item.type }}
-                </span>
-                <span class="text-xs text-gray-500">{{ formatDate(item.timestamp) }}</span>
-              </div>
-              
-              <h3 class="font-medium text-gray-900 mb-1">{{ item.title }}</h3>
-              <p class="text-sm text-gray-600 mb-2">{{ item.url }}</p>
-              
-              <!-- Screenshot Preview -->
-              <div v-if="item.type === 'screenshot' && item.content" class="mb-2">
-                <img 
-                  :src="item.content" 
-                  :alt="item.title"
-                  class="w-32 h-20 object-cover rounded border border-gray-200 cursor-pointer"
-                  @click="openScreenshotPreview(item.content, item.title)"
-                />
-              </div>
-              
-              <div v-if="item.notes" class="text-sm text-gray-700 mb-2">
-                {{ item.notes }}
-              </div>
-              
-              <div v-if="item.tags.length > 0" class="flex flex-wrap gap-1 mb-2">
-                <span
-                  v-for="tag in item.tags"
-                  :key="tag"
-                  class="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded"
-                >
-                  {{ tag }}
-                </span>
-              </div>
-              
-              <!-- PDF Preview -->
-              <div v-if="item.type === 'pdf'" class="mb-2">
-                <button
-                  @click="openPDFInViewer(item.content, item.url)"
-                  class="text-blue-600 hover:text-blue-700 text-sm font-medium"
-                >
-                  📄 Open in NabuAI Viewer
-                </button>
-              </div>
-            </div>
-            
-            <div class="flex space-x-2">
-              <button
-                @click="openUrl(item.url)"
-                class="text-blue-600 hover:text-blue-700"
-                title="Open URL"
+      <div class="space-y-6">
+        <div class="space-y-6">
+          <div v-if="isLoading" class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <Card
+              v-for="n in 6"
+              :key="n"
+              class="animate-pulse"
+            >
+              <CardContent class="p-6 space-y-4">
+                <div class="h-10 w-10 rounded-lg bg-muted"></div>
+                <div class="h-4 w-3/4 rounded bg-muted"></div>
+                <div class="h-4 w-full rounded bg-muted"></div>
+                <div class="h-3 w-2/3 rounded bg-muted"></div>
+                <div class="flex items-center justify-between pt-4 border-t border-border">
+                  <div class="h-3 w-20 rounded bg-muted"></div>
+                  <div class="h-3 w-16 rounded bg-muted"></div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card v-else-if="loadError" class="border-destructive/50">
+            <CardContent class="p-10 text-center">
+              <svg class="mx-auto mb-4 h-12 w-12 text-destructive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <CardTitle class="text-lg">We couldn't load your scribes</CardTitle>
+              <p class="mt-2 text-sm text-muted-foreground">{{ loadError }}</p>
+              <Button
+                variant="destructive"
+                @click="loadScribes()"
+                class="mt-6"
               >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                </svg>
-              </button>
-              <button
-                @click="deleteContent(item.id)"
-                class="text-red-600 hover:text-red-700"
-                title="Delete"
-              >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                </svg>
-              </button>
-            </div>
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                Try again
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card v-else-if="emptyState" class="border-dashed">
+            <CardContent class="p-10 text-center">
+              <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              </div>
+              <CardTitle class="mt-4 text-xl">No scribes match your filters</CardTitle>
+              <p class="mt-2 text-sm text-muted-foreground">Create a new workspace or adjust the filters above.</p>
+              <div class="mt-6 flex flex-wrap justify-center gap-3">
+                <Button
+                  variant="outline"
+                  @click="handleFilterChange('all')"
+                >
+                  Reset filters
+                </Button>
+                <Button
+                  variant="default"
+                  @click="showCreateModal = true"
+                >
+                  Create scribe
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div v-else class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <Card
+              v-for="s in filteredScribes"
+              :key="s.id"
+              @click="handleOpenScribe(s.id)"
+              class="group relative overflow-hidden cursor-pointer transition hover:border-primary/50 hover:bg-accent/50"
+              :class="{ 'border-green-500/40 bg-green-500/10': s.is_shared }"
+            >
+              <CardContent class="p-5">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-center gap-3">
+                    <div class="h-12 w-12 rounded-lg bg-primary/20 flex items-center justify-center">
+                      <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <CardTitle class="text-base line-clamp-1">{{ s.name || 'Untitled Conversation' }}</CardTitle>
+                      <p class="text-xs text-muted-foreground">{{ s.model || 'Default model' }}</p>
+                    </div>
+                  </div>
+                  <div class="relative" data-menu-container>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      @click.stop="openMenu(s.id)"
+                      class="h-8 w-8"
+                    >
+                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </Button>
+                    <Card
+                      v-if="menuOpen === s.id"
+                      class="absolute right-0 top-10 z-50 w-44 p-1"
+                    >
+                      <CardContent class="p-0">
+                        <template v-if="!s.is_shared">
+                          <Button variant="ghost" @click.stop="handleEdit(s)" class="w-full justify-start text-sm">Edit</Button>
+                          <Button variant="ghost" @click.stop="handleShare(s)" class="w-full justify-start text-sm">Share</Button>
+                          <Button variant="ghost" @click.stop="handleDelete(s)" class="w-full justify-start text-sm text-destructive">Delete</Button>
+                        </template>
+                        <div v-else class="px-3 py-2 text-xs text-muted-foreground">Shared by {{ s.shared_by_user_email || 'a collaborator' }}</div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+
+                <div class="mt-4 space-y-3 text-sm text-muted-foreground">
+                  <p class="line-clamp-3 min-h-[48px] text-foreground">
+                    {{ s.lastAssistantMessage || s.description || 'Conversations saved from the extension appear here with full metadata and RAG-ready context.' }}
+                  </p>
+                  <div class="flex flex-wrap gap-2 text-xs">
+                    <span class="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-2.5 py-1 text-foreground">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                      {{ s.documentCount || 0 }} docs
+                    </span>
+                    <span class="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-2.5 py-1 text-foreground">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      {{ timeAgo(s.updated_at || s.created_at) }}
+                    </span>
+                    <span v-if="s.is_shared" class="inline-flex items-center gap-1 rounded-full border border-green-500/50 bg-green-500/10 px-2.5 py-1 text-green-300">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                      Shared access
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
-      </div>
 
-      <!-- Empty State -->
-      <div v-if="filteredContent.length === 0" class="text-center py-8">
-        <div class="text-gray-400 mb-4">
-          <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-          </svg>
-        </div>
-        <h3 class="text-lg font-medium text-gray-900 mb-2">No content found</h3>
-        <p class="text-gray-500">Start saving content to see it here</p>
-      </div>
-
-      <!-- Actions -->
-      <div class="mt-6 space-y-3">
-        <button
-          @click="exportData"
-          class="w-full bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200"
-        >
-          Export All Data
-        </button>
-        <button
-          @click="clearAllData"
-          class="w-full bg-red-100 text-red-700 px-4 py-2 rounded-md hover:bg-red-200"
-        >
-          Clear All Data
-        </button>
       </div>
     </div>
+
+    <!-- Create Scribe Modal -->
+    <CreateScribeModal
+      :isOpen="showCreateModal"
+      @close="showCreateModal = false"
+      @create="handleCreateScribe"
+    />
+
+    <!-- Share Scribe Modal -->
+    <ShareScribeModal
+      :isOpen="showShareModal"
+      :scribeId="selectedScribeForShare?.id || ''"
+      :scribeName="selectedScribeForShare?.name || ''"
+      @close="showShareModal = false"
+      @shared="handleShareSuccess"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { storageManager, type SavedContent } from '../utils/storage'
+import { ref, onMounted, computed, onBeforeUnmount } from 'vue'
+import { storageManager } from '../utils/storage'
+import { databaseService } from '../utils/database'
+import { getCurrentUser, signOut, clearUserCache } from '../utils/auth'
+import CreateScribeModal from './components/CreateScribeModal.vue'
+import ShareScribeModal from './components/ShareScribeModal.vue'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Card, CardContent, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+const emit = defineEmits<{ (e: 'back'): void; (e: 'open-scribe', id: string): void }>()
 
-const emit = defineEmits(['back'])
+type FilterMode = 'all' | 'owned' | 'shared'
 
-const content = ref<SavedContent[]>([])
 const searchQuery = ref('')
-const stats = ref({
-  totalItems: 0,
-  totalSize: 0,
-  byType: {}
+const scribes = ref<any[]>([])
+const menuOpen = ref<string | null>(null)
+const isLoading = ref(false)
+const loadError = ref<string | null>(null)
+const showCreateModal = ref(false)
+const showShareModal = ref(false)
+const selectedScribeForShare = ref<any>(null)
+const filterMode = ref<FilterMode>('all')
+const filterOptions = [
+  { label: 'All scribes', value: 'all' as FilterMode },
+  { label: 'Owned', value: 'owned' as FilterMode },
+  { label: 'Shared', value: 'shared' as FilterMode }
+]
+const filterCounts = computed(() => {
+  const shared = scribes.value.filter(s => s.is_shared).length
+  return {
+    all: scribes.value.length,
+    owned: scribes.value.length - shared,
+    shared
+  }
 })
+const filteredScribes = computed(() => {
+  const q = searchQuery.value.trim().toLowerCase()
+  return scribes.value
+    .filter(s => {
+      if (filterMode.value === 'owned') return !s.is_shared
+      if (filterMode.value === 'shared') return Boolean(s.is_shared)
+      return true
+    })
+    .filter(s => (s.name || '').toLowerCase().includes(q))
+})
+const emptyState = computed(() => !isLoading.value && !loadError.value && filteredScribes.value.length === 0)
+const scribeStats = computed(() => {
+  const total = scribes.value.length
+  const shared = scribes.value.filter(s => s.is_shared).length
+  const totalDocuments = scribes.value.reduce((sum, s) => sum + (s.documentCount || 0), 0)
+  const latestTimestamp = scribes.value.reduce((latest, s) => {
+    const date = new Date(s.updated_at || s.created_at).getTime()
+    return date > latest ? date : latest
+  }, 0)
 
-const filteredContent = computed(() => {
-  if (!searchQuery.value) return content.value
-  
-  const query = searchQuery.value.toLowerCase()
-  return content.value.filter(item => 
-    item.title.toLowerCase().includes(query) ||
-    item.notes?.toLowerCase().includes(query) ||
-    item.tags.some(tag => tag.toLowerCase().includes(query)) ||
-    item.url.toLowerCase().includes(query)
-  )
+  return {
+    total,
+    shared,
+    totalDocuments,
+    lastUpdated: latestTimestamp ? timeAgo(new Date(latestTimestamp).toISOString()) : '—'
+  }
+})
+const currentUserName = ref<string | null>(null)
+const workspaceTitle = computed(() => {
+  if (!currentUserName.value) return 'Your Workspace'
+  const name = currentUserName.value
+  const suffix = /s$/i.test(name) ? '\'' : '\'s'
+  return `${name}${suffix} Workspace`
 })
 
 onMounted(async () => {
-  await loadContent()
-  await loadStats()
+  await loadCurrentUser()
+  await loadScribes()
+  document.addEventListener('click', handleClickOutside)
 })
 
-async function loadContent() {
-  content.value = await storageManager.getAllContent()
-}
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
 
-async function loadStats() {
-  stats.value = await storageManager.getStorageStats()
-}
-
-async function searchContent() {
-  if (searchQuery.value) {
-    content.value = await storageManager.searchContent(searchQuery.value)
-  } else {
-    await loadContent()
-  }
-}
-
-async function deleteContent(id: string) {
-  if (confirm('Are you sure you want to delete this item?')) {
-    await storageManager.deleteContent(id)
-    await loadContent()
-    await loadStats()
-  }
-}
-
-async function clearAllData() {
-  if (confirm('Are you sure you want to delete ALL saved content? This cannot be undone!')) {
-    for (const item of content.value) {
-      await storageManager.deleteContent(item.id)
+async function loadScribes() {
+  isLoading.value = true
+  loadError.value = null
+  
+  try {
+    console.log('🔄 Loading scribes in dashboard...')
+    const list = await databaseService.getUserScribes()
+    console.log('📋 Loaded', list.length, 'scribes from database')
+    
+    if (!list || list.length === 0) {
+      console.log('ℹ️ No scribes found')
+      scribes.value = []
+      return
     }
-    await loadContent()
-    await loadStats()
+    
+    const withCounts = await Promise.all(list.map(async (s) => {
+      try {
+        const [docs, lastAssistantMessage] = await Promise.all([
+          databaseService.getDocumentsByScribe(s.id),
+          databaseService.getLastAssistantMessage(s.id)
+        ])
+        return { ...s, documentCount: docs.length, lastAssistantMessage }
+      } catch (e) {
+        console.warn('Failed to load scribe meta:', s.id, e)
+        return { ...s, documentCount: 0, lastAssistantMessage: null }
+      }
+    }))
+    
+    scribes.value = withCounts
+    console.log('✅ Scribes loaded in dashboard:', scribes.value.length)
+  } catch (e) {
+    console.error('❌ Failed to load scribes in dashboard:', e)
+    const errorMessage = e instanceof Error ? e.message : 'Unknown error'
+    loadError.value = errorMessage
+    scribes.value = []
+  } finally {
+    isLoading.value = false
+  }
+}
+
+async function loadCurrentUser() {
+  try {
+    const { user } = await getCurrentUser()
+    if (user) {
+      const displayName =
+        (user.user_metadata && (user.user_metadata.full_name || user.user_metadata.name)) ||
+        (user.email ? user.email.split('@')[0] : null)
+      currentUserName.value = displayName
+    }
+  } catch (err) {
+    console.warn('Failed to load user info for workspace title:', err)
+  }
+}
+function openMenu(scribeId: string) {
+  menuOpen.value = menuOpen.value === scribeId ? null : scribeId
+}
+
+function handleClickOutside(e: MouseEvent) {
+  const target = e.target as HTMLElement
+  // Close menu if clicking outside the menu container
+  if (!target.closest('[data-menu-container]')) {
+    menuOpen.value = null
+  }
+}
+
+async function handleEdit(scribe: any) {
+  menuOpen.value = null
+  const newName = prompt('Edit scribe name:', scribe.name)
+  if (newName && newName.trim() && newName !== scribe.name) {
+    isLoading.value = true
+    try {
+      await databaseService.updateScribe(scribe.id, { name: newName.trim() })
+      await loadScribes()
+    } catch (e) {
+      console.error('Failed to update scribe:', e)
+      alert(`Failed to update scribe: ${e instanceof Error ? e.message : 'Unknown error'}`)
+      await loadScribes() // Reload to refresh state
+    } finally {
+      isLoading.value = false
+    }
+  }
+}
+
+function handleShare(scribe: any) {
+  menuOpen.value = null
+  selectedScribeForShare.value = scribe
+  showShareModal.value = true
+}
+
+function handleShareSuccess() {
+  // Reload scribes to show updated share information if needed
+  loadScribes()
+}
+
+async function handleDelete(scribe: any) {
+  menuOpen.value = null
+  if (confirm(`Delete "${scribe.name}"? This cannot be undone.`)) {
+    isLoading.value = true
+    try {
+      await databaseService.deleteScribe(scribe.id)
+      await loadScribes()
+    } catch (e) {
+      console.error('Failed to delete scribe:', e)
+      alert(`Failed to delete scribe: ${e instanceof Error ? e.message : 'Unknown error'}`)
+      await loadScribes() // Reload to refresh state
+    } finally {
+      isLoading.value = false
+    }
+  }
+}
+
+async function handleCreateScribe(data: { name: string; model?: string }) {
+  isLoading.value = true
+  try {
+    await databaseService.createScribe({ 
+      name: data.name,
+      model: data.model || 'gpt-4'
+    })
+    await loadScribes()
+    showCreateModal.value = false
+  } catch (e) {
+    console.error('Failed to create scribe:', e)
+    alert(`Failed to create scribe: ${e instanceof Error ? e.message : 'Unknown error'}`)
+    await loadScribes() // Reload to refresh state
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -251,93 +462,52 @@ async function exportData() {
   URL.revokeObjectURL(url)
 }
 
-function openUrl(url: string) {
-  chrome.tabs.create({ url })
-}
-
-function openPDFInViewer(pdfUrl: string, sourceUrl: string) {
-  // Create PDF viewer URL with parameters
-  const viewerUrl = chrome.runtime.getURL('pdf-viewer.html')
-  const params = new URLSearchParams({
-    url: pdfUrl,
-    source: sourceUrl
-  })
-  
-  const fullViewerUrl = `${viewerUrl}?${params.toString()}`
-  
-  // Open PDF viewer in new tab
-  chrome.tabs.create({
-    url: fullViewerUrl,
-    active: true
-  })
-}
-
-function openScreenshotPreview(imageSrc: string, title: string) {
-  // Create a new tab with the screenshot
-  const html = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>${title} - NabuAI Screenshot</title>
-      <style>
-        body { 
-          margin: 0; 
-          padding: 20px; 
-          background: #f5f5f5; 
-          display: flex; 
-          justify-content: center; 
-          align-items: center; 
-          min-height: 100vh; 
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-        .container { 
-          background: white; 
-          border-radius: 8px; 
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-          padding: 20px; 
-          max-width: 90vw; 
-          max-height: 90vh; 
-          overflow: auto;
-        }
-        img { 
-          max-width: 100%; 
-          height: auto; 
-          border-radius: 4px; 
-        }
-        h1 { 
-          margin: 0 0 20px 0; 
-          color: #333; 
-          font-size: 24px; 
-        }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <h1>${title}</h1>
-        <img src="${imageSrc}" alt="${title}" />
-      </div>
-    </body>
-    </html>
-  `
-  
-  const blob = new Blob([html], { type: 'text/html' })
-  const url = URL.createObjectURL(blob)
-  chrome.tabs.create({ url })
-}
-
-function getTypeBadgeClass(type: string): string {
-  const classes = {
-    page: 'bg-blue-100 text-blue-800',
-    text: 'bg-green-100 text-green-800',
-    image: 'bg-purple-100 text-purple-800',
-    video: 'bg-orange-100 text-orange-800',
-    screenshot: 'bg-indigo-100 text-indigo-800',
-    pdf: 'bg-red-100 text-red-800'
+async function handleLogout() {
+  try {
+    // Sign out from Supabase
+    await signOut()
+    
+    // Clear all caches
+    clearUserCache()
+    databaseService.clearUserCache()
+    
+    // Clear chrome.storage.local session
+    await chrome.storage.local.remove('supabase_session')
+    
+    // Notify background script to clear session
+    chrome.runtime.sendMessage({
+      action: 'clearAuthSession'
+    }).catch(() => {}) // Ignore errors if background script is not ready
+    
+    console.log('✅ Logged out successfully')
+    
+    // Close the dashboard tab since user is logged out
+    // Get current tab and close it
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
+    if (tabs[0]?.id) {
+      chrome.tabs.remove(tabs[0].id)
+    }
+  } catch (error: any) {
+    console.error('❌ Error logging out:', error)
+    alert(`Failed to logout: ${error?.message || 'Unknown error'}`)
   }
-  return classes[type as keyof typeof classes] || 'bg-gray-100 text-gray-800'
 }
 
-function formatDate(timestamp: string): string {
-  return new Date(timestamp).toLocaleDateString()
+function handleFilterChange(mode: FilterMode) {
+  filterMode.value = mode
+}
+
+function timeAgo(iso: string) {
+  const d = new Date(iso)
+  const diff = Math.floor((Date.now() - d.getTime()) / 1000)
+  if (diff < 60) return 'just now'
+  const m = Math.floor(diff/60); if (m < 60) return `${m} min ago`
+  const h = Math.floor(m/60); if (h < 24) return `${h} hours ago`
+  const w = Math.floor(h/24/7); if (w >= 1) return `${w} week${w>1?'s':''} ago`
+  const days = Math.floor(h/24); return `${days} day${days>1?'s':''} ago`
+}
+
+function handleOpenScribe(id: string) {
+  emit('open-scribe', id)
 }
 </script>

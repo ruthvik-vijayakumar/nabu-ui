@@ -1,91 +1,125 @@
 <template>
-  <div class="save-modal show" @click="handleBackdropClick">
-    <div class="modal-content" @click.stop>
-      <div class="modal-header">
-        <h3 class="modal-title">Save PDF to NabuAI</h3>
-        <button class="close-btn" @click="$emit('close')">
-          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label class="form-label">PDF File</label>
-          <div class="form-display">{{ filename }}</div>
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4 py-6" @click="handleBackdropClick">
+    <Card class="w-full max-w-lg shadow-2xl" @click.stop>
+      <CardHeader class="space-y-1">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <CardDescription>Save content to your workspace</CardDescription>
+            <CardTitle>Save PDF to NabuAI</CardTitle>
+          </div>
+          <Button variant="ghost" size="icon" class="h-8 w-8" @click="$emit('close')">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </Button>
         </div>
-        <div class="form-group">
-          <label class="form-label">PDF URL</label>
-          <div class="form-display">{{ pdfUrl }}</div>
+      </CardHeader>
+
+      <CardContent class="space-y-5">
+        <FieldGroup class="space-y-3">
+          <Field>
+            <FieldLabel class="text-xs uppercase tracking-wide">PDF file</FieldLabel>
+            <div class="rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground truncate" :title="filename">
+              {{ filename }}
+            </div>
+          </Field>
+          <Field>
+            <FieldLabel class="text-xs uppercase tracking-wide">PDF URL</FieldLabel>
+            <div class="rounded-lg border border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground break-all">
+              {{ pdfUrl }}
+            </div>
+          </Field>
+          <Field>
+            <FieldLabel class="text-xs uppercase tracking-wide">Source page</FieldLabel>
+            <div class="rounded-lg border border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground break-all">
+              {{ sourceUrl || 'Unknown source' }}
+            </div>
+          </Field>
+        </FieldGroup>
+
+        <Separator />
+
+        <FieldGroup class="space-y-4">
+          <Field>
+            <FieldLabel>Title</FieldLabel>
+            <Input
+              v-model="formData.title"
+              id="pdf-title"
+              placeholder="Give this PDF a memorable title"
+            />
+          </Field>
+          <Field>
+            <FieldLabel>Tags</FieldLabel>
+            <Input
+              v-model="formData.tags"
+              id="pdf-tags"
+              placeholder="Design, research, meetings..."
+            />
+            <CardDescription class="text-xs mt-1">
+              Separate tags with commas to keep things organized.
+            </CardDescription>
+          </Field>
+          <Field>
+            <FieldLabel>Notes</FieldLabel>
+            <Textarea
+              v-model="formData.notes"
+              rows="3"
+              placeholder="Add optional context or highlights"
+            />
+          </Field>
+        </FieldGroup>
+
+        <div class="flex items-center gap-3 pt-2">
+          <Button class="flex-1" @click="handleSave">
+            Save PDF
+          </Button>
+          <Button variant="outline" class="flex-1" @click="$emit('close')">
+            Cancel
+          </Button>
         </div>
-        <div class="form-group">
-          <label class="form-label">Source Page</label>
-          <div class="form-display">{{ sourceUrl || 'Unknown' }}</div>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="pdf-title">Title</label>
-          <input 
-            v-model="formData.title"
-            type="text" 
-            id="pdf-title" 
-            class="form-input" 
-            placeholder="Enter a title for this PDF..."
-          />
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="pdf-tags">Tags</label>
-          <input 
-            v-model="formData.tags"
-            type="text" 
-            id="pdf-tags" 
-            class="form-input" 
-            placeholder="Enter tags separated by commas..."
-          />
-        </div>
-        <div class="modal-actions">
-          <button @click="handleSave" class="btn btn-primary">Save PDF</button>
-          <button @click="$emit('close')" class="btn btn-secondary">Cancel</button>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import type { SaveModalData } from '../types'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
+import { Separator } from '@/components/ui/separator'
 
-// Props
 const props = defineProps<{
   pdfUrl: string
   sourceUrl?: string
   filename: string
 }>()
 
-// Emits
 const emit = defineEmits<{
   close: []
   save: [data: SaveModalData]
 }>()
 
-// Form data
 const formData = ref<SaveModalData>({
   title: '',
-  tags: ''
+  tags: '',
+  notes: ''
 })
 
-// Methods
 const handleSave = () => {
   if (!formData.value.title.trim()) {
     alert('Please enter a title for the PDF')
     return
   }
-  
+
   const tags = formData.value.tags
     .split(',')
     .map(tag => tag.trim())
     .filter(tag => tag)
-  
+
   emit('save', {
     title: formData.value.title,
     tags,
@@ -99,152 +133,8 @@ const handleBackdropClick = (e: MouseEvent) => {
   }
 }
 
-// Lifecycle
 onMounted(() => {
   formData.value.title = props.filename.replace('.pdf', '')
 })
 </script>
-
-<style scoped>
-.save-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-}
-
-.save-modal.show {
-  display: flex;
-}
-
-.modal-content {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  max-width: 500px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
-  color: #1f2937;
-}
-
-.modal-header {
-  padding: 24px 24px 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.modal-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #111827;
-  margin: 0;
-}
-
-.close-btn {
-  color: #9ca3af;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 6px;
-  transition: background-color 0.2s;
-}
-
-.close-btn:hover {
-  background: #f3f4f6;
-}
-
-.modal-body {
-  padding: 24px;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-label {
-  display: block;
-  font-size: 14px;
-  font-weight: 500;
-  color: #374151;
-  margin-bottom: 8px;
-}
-
-.form-input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.form-input:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.form-display {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 12px;
-  font-size: 14px;
-  color: #6b7280;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.modal-actions .btn {
-  flex: 1;
-  justify-content: center;
-}
-
-.btn {
-  padding: 8px 15px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  border: none;
-}
-
-.btn-primary {
-  background-color: #2563eb;
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #1d4ed8;
-}
-
-.btn-secondary {
-  background-color: #4a4a4a;
-  color: #e0e0e0;
-}
-
-.btn-secondary:hover {
-  background-color: #5a5a5a;
-}
-</style>
 

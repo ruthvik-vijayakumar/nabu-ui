@@ -57,11 +57,22 @@ onMounted(async () => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 3000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .note-modal.show {
@@ -69,72 +80,103 @@ onMounted(async () => {
 }
 
 .note-content {
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+  padding: 24px;
   max-width: 400px;
   width: 90%;
-  color: #333;
+  color: #e0e0e0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .note-content h3 {
-  margin: 0 0 16px;
-  color: #111827;
+  margin: 0 0 20px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.5px;
 }
 
 .note-textarea {
   width: 100%;
-  min-height: 100px;
-  padding: 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  min-height: 120px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
   font-size: 14px;
   resize: vertical;
   outline: none;
   font-family: inherit;
+  background: rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+  transition: all 0.2s;
+}
+
+.note-textarea::placeholder {
+  color: #6b7280;
 }
 
 .note-textarea:focus {
   border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background: rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
 .modal-actions {
   display: flex;
   gap: 12px;
-  margin-top: 16px;
+  margin-top: 24px;
 }
 
 .btn {
   flex: 1;
-  padding: 12px 24px;
+  padding: 10px 18px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: inherit;
 }
 
 .btn-primary {
-  background-color: #2563eb;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   color: white;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
 }
 
 .btn-primary:hover {
-  background-color: #1d4ed8;
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+  transform: translateY(-1px);
 }
 
 .btn-secondary {
-  background-color: #f3f4f6;
-  color: #374151;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .btn-secondary:hover {
-  background-color: #e5e7eb;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 </style>
 

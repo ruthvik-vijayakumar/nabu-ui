@@ -1,4 +1,4 @@
-import { copyFile, mkdir, readdir, stat } from 'fs/promises'
+import { copyFile, mkdir, readdir, stat, unlink, rename } from 'fs/promises'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -17,6 +17,25 @@ async function copyDir(src, dest) {
       await copyDir(srcPath, destPath)
     } else {
       await copyFile(srcPath, destPath)
+    }
+  }
+}
+
+async function cleanupUnderscoreFiles(dir) {
+  const entries = await readdir(dir, { withFileTypes: true })
+  
+  for (const entry of entries) {
+    const fullPath = join(dir, entry.name)
+    
+    if (entry.isDirectory()) {
+      // Recursively clean subdirectories
+      await cleanupUnderscoreFiles(fullPath)
+    } else if (entry.name.startsWith('_')) {
+      // Rename files starting with underscore
+      const newName = entry.name.replace(/^_/, 'x')
+      const newPath = join(dir, newName)
+      await rename(fullPath, newPath)
+      console.log(`  Renamed: ${entry.name} → ${newName}`)
     }
   }
 }
@@ -71,6 +90,14 @@ async function buildExtension() {
       console.log('✓ Copied icons directory')
     } catch (error) {
       console.log('⚠ Icons directory not found, skipping...')
+    }
+    
+    // Clean up files starting with underscore (Chrome extension restriction)
+    try {
+      await cleanupUnderscoreFiles('dist')
+      console.log('✓ Cleaned up files with leading underscores')
+    } catch (error) {
+      console.log('⚠ Could not clean up underscore files:', error.message)
     }
     
     console.log('\n🎉 Extension built successfully!')
