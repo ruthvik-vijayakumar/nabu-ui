@@ -1,14 +1,13 @@
 # NabuAI Chrome Extension
-A Chrome extension that acts as a user's personal memory and organization layer for all online content. Seamlessly capture and intelligently save information from any webpage, bridging the gap between fragmented content consumption and a unified, actionable knowledge base.
+NabuAI is the personal AI research assistant that turns your scattered web content, PDFs, and notes into one unified, searchable knowledge graph. We help academics and researchers eliminate the 8-16 hours per week wasted on manual organization and instantly get answers grounded in their saved data.
 
 ## Technical Stack
 
 - **Frontend**: Vue 3 with TypeScript
-- **Styling**: Tailwind CSS + Tailwind UI
+- **Styling**: Tailwind CSS + shadcn
 - **Build Tool**: Vite
 - **Browser**: Chrome Extension Manifest V3
 - **Backend**: Supabase (PostgreSQL + Auth + Storage)
-- **AI**: Ready for OpenAI/Claude integration
 
 ## Project Structure
 
@@ -48,26 +47,21 @@ nabu-ui/
    - Create account at https://supabase.com
    - Create a new project
    - Run migrations in SQL Editor:
-     - `supabase/migrations/001_initial_schema.sql`
-     - `supabase/migrations/002_functions.sql`
    - Get your API credentials from Settings → API
 
-3. **Configure (optional)**
-   - Supabase credentials are already configured
-   - For custom setup, see `SUPABASE_SETUP.md`
 
-4. **Build the extension**
+3. **Build the extension**
    ```bash
    npm run build
    ```
 
-5. **Load in Chrome**
+4. **Load in Chrome**
    - Open Chrome and go to `chrome://extensions/`
    - Enable "Developer mode" (toggle in top right)
    - Click "Load unpacked"
    - Select the `dist/` folder from your project
 
-6. **Create account**
+5. **Create account**
    - Click the extension icon
    - Sign up with email/password
    - Start saving content!
@@ -102,24 +96,11 @@ nabu-ui/
 4. Click "Save Page"
 
 ### Saving Media
-1. Right-click on any image or video
+1. Right-click on any image 
 2. Choose "Save to NabuAI"
 3. Add tags and click Save
 
 ## Configuration
-
-### Storage Backends
-The extension supports multiple storage backends:
-
-- **Supabase** (default) - Cloud storage with full features
-- **Chrome Storage** - Local browser storage  
-- **localStorage** - Simple local storage
-
-Switch backends in code:
-```typescript
-import { storageManager } from './utils/storage'
-storageManager.setStorageBackend('chrome')
-```
 
 ### Manifest Settings
 The extension uses Manifest V3 with the following permissions:
@@ -141,30 +122,6 @@ The extension uses Manifest V3 with the following permissions:
 - Edge 88+ (Chromium-based)
 - Other Chromium-based browsers
 
-## Troubleshooting
-
-### Common Issues
-
-1. **Extension not loading**
-   - Ensure Developer mode is enabled
-   - Check console for build errors
-   - Verify all files are in `dist/` folder
-
-2. **Context menu not appearing**
-   - Check if content script is injected
-   - Verify permissions in manifest
-   - Reload extension after changes
-
-3. **Build errors**
-   - Clear `node_modules` and reinstall
-   - Check TypeScript configuration
-   - Verify Vite configuration
-
-### Debug Mode
-- Open Chrome DevTools on extension popup
-- Check background script console
-- Monitor content script execution
-
 ## Contributing
 
 1. Fork the repository
@@ -183,18 +140,3 @@ For support and questions:
 - Create an issue in the repository
 - Check the troubleshooting section
 - Review Chrome extension documentation
-
-## Features
-
-✅ **Implemented**
-- Email/password authentication via Supabase
-- Cloud storage with PostgreSQL database
-- Save pages, text, images, videos
-- PDF viewer with annotations
-- Full-text search
-- Tag-based organization
-- Dashboard with statistics
-- Dark mode UI (Tailwind UI)
-- Row-level security
-- Multi-backend storage support
-

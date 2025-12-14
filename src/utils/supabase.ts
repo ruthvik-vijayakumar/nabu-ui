@@ -4,8 +4,8 @@ import './polyfills'
 import { createClient, type SupabaseClientOptions } from '@supabase/supabase-js'
 
 // Replace these with your Supabase project credentials
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://nsgpnhxaambdziptqvyp.supabase.co'
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zZ3BuaHhhYW1iZHppcHRxdnlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2MjM3NTksImV4cCI6MjA3NzE5OTc1OX0.rNsTiJveGo6dWKyr_YgSqNK3Wt9uKKpGSTY3ois5rHY'
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY 
 
 // Detect if we're in a service worker environment
 // Check for service worker context (no window, no document)
@@ -72,7 +72,7 @@ try {
 
   supabase = createClient(supabaseUrl, supabaseAnonKey, options)
 } catch (error) {
-  console.error('❌ Failed to create Supabase client:', error)
+  console.error('Failed to create Supabase client:', error)
   // Fallback: create client with minimal options
   supabase = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {

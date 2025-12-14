@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4 py-6" @click="handleBackdropClick">
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm px-4 py-6" @click="handleBackdropClick">
     <Card class="w-full max-w-lg shadow-2xl" @click.stop>
       <CardHeader class="space-y-1">
         <div class="flex items-start justify-between gap-4">

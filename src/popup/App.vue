@@ -1,7 +1,7 @@
 <template>
-  <div class="dark bg-background text-foreground min-h-full">
+  <div class="dark bg-background text-foreground w-full h-full overflow-hidden flex flex-col">
   <!-- Loading State -->
-  <div v-if="isCheckingAuth" class="min-h-96 min-w-96 bg-background flex items-center justify-center">
+  <div v-if="isCheckingAuth" class="w-full h-full bg-background flex items-center justify-center">
     <div class="text-center">
       <svg class="animate-spin h-12 w-12 text-primary mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -12,10 +12,10 @@
   </div>
 
   <!-- Login Screen -->
-  <Login class="min-h-96 min-w-96 w-full" v-else-if="!currentUser" @login-success="handleLoginSuccess" />
+  <Login class="w-full h-full" v-else-if="!currentUser" @login-success="handleLoginSuccess" />
 
   <!-- Scribe Selection View -->
-  <div v-else-if="showScribeSelection" class="max-w-96 w-full">
+  <div v-else-if="showScribeSelection" class="w-full h-full overflow-hidden">
     <ScribeSelection
       :selectedScribeId="selectedScribeId"
       :newScribeName="scribeName"
@@ -25,115 +25,100 @@
   </div>
 
   <!-- Main App -->
-  <div class="max-w-96 min-h-96 w-full bg-background" v-else-if="!showDashboard && !showScribeSelection">
+  <div class="w-full h-full flex flex-col overflow-hidden" v-else-if="!showDashboard && !showScribeSelection">
       <!-- Header with Navigation -->
-      <div class="bg-background/95 backdrop-blur-sm border-b border-border shadow-sm">
+      <div class="flex-shrink-0 border-b border-border bg-card">
         <!-- Logo and Title -->
-        <div class="flex items-center justify-between px-4 py-3 border-b border-border/50">
-          <div class="flex items-center space-x-3">
-            <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg ring-2 ring-blue-500/20">
-              <span class="text-white font-bold text-sm">N</span>
+        <div class="flex items-center justify-between px-4 py-3">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+              <span class="text-primary-foreground font-bold text-sm">N</span>
             </div>
             <div>
-              <h1 class="text-sm font-bold text-foreground leading-tight">NabuAI</h1>
+              <h1 class="text-sm font-semibold text-foreground leading-tight">NabuAI</h1>
               <p class="text-xs text-muted-foreground leading-tight">Knowledge Base</p>
             </div>
           </div>
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
             @click="handleLogout"
-            class="p-1.5 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
+            class="h-8 w-8"
             title="Logout"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
             </svg>
-          </button>
+          </Button>
         </div>
 
         <!-- Navigation Tabs -->
-        <div class="flex items-center gap-1 px-2 py-2">
-          <button
+        <div class="flex items-center gap-1 px-2 pb-2">
+          <Button
+            variant="ghost"
+            size="sm"
             @click="openDashboard"
-            class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-colors text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+            class="flex items-center gap-2"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
             </svg>
             <span>Dashboard</span>
-          </button>
-          <!-- <button
-            class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-colors bg-accent text-accent-foreground"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
-            </svg>
-            <span>Save Page</span>
-          </button> -->
+          </Button>
         </div>
       </div>
 
       <!-- Page Info -->
-      <div class="p-4 space-y-4">
-        <Card 
-          class="cursor-pointer hover:bg-accent/50 transition-colors"
-          @click="showNotes = !showNotes"
-        >
+      <div class="flex-1 overflow-hidden p-4 space-y-3">
+        <Card class="hover:border-primary/50 transition-colors">
           <CardContent class="p-3">
-            <div class="flex items-center space-x-3">
-            <div class="flex-shrink-0">
-              <div class="w-10 h-10 bg-card rounded-lg flex items-center justify-center ring-1 ring-border overflow-hidden">
-                <img
-                  v-if="faviconUrl"
-                  :src="faviconUrl"
-                  :alt="pageInfo.title"
-                  class="w-full h-full object-contain"
-                  referrerpolicy="no-referrer"
-                />
-                <svg v-else class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
+            <div class="flex items-center gap-3">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 rounded-lg bg-muted flex items-center justify-center border border-border overflow-hidden">
+                  <img
+                    v-if="faviconUrl"
+                    :src="faviconUrl"
+                    :alt="pageInfo.title"
+                    class="w-full h-full object-contain p-1"
+                    referrerpolicy="no-referrer"
+                  />
+                  <svg v-else class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                </div>
               </div>
-            </div>
               <div class="flex-1 min-w-0">
-                <h2 class="text-sm font-semibold text-card-foreground truncate">{{ pageInfo.title }}</h2>
+                <h2 class="text-sm font-semibold text-foreground truncate">{{ pageInfo.title }}</h2>
                 <p class="text-xs text-muted-foreground truncate mt-1">{{ pageInfo.url }}</p>
               </div>
-          
             </div>
           </CardContent>
         </Card>
 
 
-          <Card>
-            <CardContent class="p-4">
-              <FieldGroup>
-                <Field>
-                  <FieldLabel for="notes" class="flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                    </svg>
-                    Add notes or context
-                  </FieldLabel>
-                  <Textarea
-                    id="notes"
-                    v-model="notes"
-                    rows="3"
-                    placeholder="What's important about this page? Add your thoughts..."
-                    class="text-xs"
-                  />
-                </Field>
-              </FieldGroup>
-            </CardContent>
-          </Card>
+        <Card>
+          <CardHeader class="pb-2 p-3">
+            <CardTitle class="text-sm font-semibold">Notes</CardTitle>
+            <CardDescription class="text-xs">Add context or thoughts about this page</CardDescription>
+          </CardHeader>
+          <CardContent class="p-3 pt-0">
+            <Textarea
+              id="notes"
+              v-model="notes"
+              rows="2"
+              placeholder="What's important about this page? Add your thoughts..."
+              class="resize-none"
+            />
+          </CardContent>
+        </Card>
 
         <!-- Scribe Select / Create -->
         <Card>
-          <CardHeader class="p-3">
-            <CardTitle class="text-sm">
-              Scribe
-            </CardTitle>
+          <CardHeader class="pb-2 p-3">
+            <CardTitle class="text-sm font-semibold">Scribe</CardTitle>
+            <CardDescription class="text-xs">Link this page to a conversation</CardDescription>
           </CardHeader>
-          <CardContent class="space-y-3 p-3 pt-0">
+          <CardContent class="p-3 pt-0">
             <Button
               variant="outline"
               class="w-full justify-between h-auto py-3"
@@ -145,7 +130,7 @@
                 </p>
                 <p class="text-xs text-muted-foreground mt-0.5 truncate">{{ getScribeHelperText() }}</p>
               </div>
-              <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-4 h-4 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
               </svg>
             </Button>
@@ -153,18 +138,18 @@
         </Card>
 
         <!-- Action Buttons -->
-        <div class="space-y-3">
+        <div class="space-y-2">
           <Button
             @click="savePage"
             :disabled="isSaving"
-            class="w-full text-white"
-            size="default"
+            class="w-full"
+            size="lg"
           >
-            <svg v-if="isSaving" class="animate-spin h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <svg v-if="isSaving" class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            <svg v-else class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg v-else class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
             </svg>
             <span v-if="isSaving">Saving...</span>
@@ -176,38 +161,37 @@
       <!-- Success Message -->
       <div
         v-if="showSuccess"
-        class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
+        @click.self="showSuccess = false"
       >
-        <Card class="rounded-2xl p-6 max-w-sm mx-4 text-center shadow-2xl transform transition-all">
-          <div class="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4 ring-4 ring-emerald-500/20">
-            <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-            </svg>
-          </div>
-          <h3 class="text-xl font-bold text-card-foreground mb-2">Page Saved!</h3>
-          <p class="text-sm text-muted-foreground mb-6">Your page has been successfully saved to NabuAI.</p>
-          <Button
-            @click="showSuccess = false"
-            class="w-full"
-            size="lg"
-          >
-            Continue
-          </Button>
+        <Card class="w-full max-w-sm">
+          <CardContent class="pt-6 pb-6 text-center">
+            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+              <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-foreground mb-2">Page Saved!</h3>
+            <p class="text-sm text-muted-foreground mb-6">Your page has been successfully saved to NabuAI.</p>
+            <Button
+              @click="showSuccess = false"
+              class="w-full"
+              size="lg"
+            >
+              Continue
+            </Button>
+          </CardContent>
         </Card>
       </div>
   </div>
 
-  <!-- Dashboard -->
-  <Dashboard v-else-if="!showScribeDetail" @back="showDashboard = false" @open-scribe="openScribe" />
-
   <!-- Scribe Detail -->
-  <ScribeDetail v-else :scribeId="activeScribeId" @back="closeScribe" />
+  <ScribeDetail v-if="showScribeDetail" :scribeId="activeScribeId" @back="closeScribe" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import Dashboard from './Dashboard.vue'
 import ScribeDetail from './ScribeDetail.vue'
 import Login from './Login.vue'
 import ScribeSelection from './components/ScribeSelection.vue'

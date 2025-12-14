@@ -1,55 +1,79 @@
 <template>
   <div class="dark min-h-screen bg-background text-foreground">
-    <!-- Hero -->
-    <div class="relative overflow-hidden border-b border-border bg-card">
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div class="max-w-3xl">
-            <p class="text-xs font-semibold tracking-[0.4em] text-muted-foreground uppercase">Workspace</p>
-            <h1 class="mt-3 text-3xl sm:text-4xl font-semibold text-foreground">{{ workspaceTitle }}</h1>
-            <p class="mt-3 text-sm sm:text-base text-muted-foreground">
-              Operate your AI research companions in one elegant view. Track shared knowledge, collaborate with teammates, and jump into context-aware chats instantly.
-            </p>
-            <div class="mt-5 flex flex-wrap gap-6 text-sm text-muted-foreground">
-              <div class="flex items-center gap-2">
-                <span class="text-2xl font-semibold text-foreground">{{ scribeStats.total }}</span>
-                <span>Total scribes</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="text-2xl font-semibold text-foreground">{{ scribeStats.shared }}</span>
-                <span>Shared with you</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="text-2xl font-semibold text-foreground">{{ scribeStats.totalDocuments }}</span>
-                <span>Documents saved</span>
-              </div>
-            </div>
-          </div>
-          <div class="flex flex-wrap items-center gap-3">
+    <!-- Header -->
+    <div class="border-b border-border bg-card">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <div class="flex items-center justify-between">
+          <h1 class="text-xl font-semibold text-foreground">NabuAI</h1>
+          <div class="flex items-center gap-3">
             <Button
-              variant="outline"
-              @click="handleLogout"
-              title="Logout"
-            >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-              Logout
-            </Button>
-            <Button
-              variant="outline"
-              @click="exportData"
-            >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-              Export
-            </Button>
-            <Button
+              size="sm"
               @click="showCreateModal = true"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
               Create Scribe
             </Button>
+            <!-- Profile Menu -->
+            <div class="relative" data-profile-menu @click.stop>
+              <Button
+                variant="ghost"
+                size="sm"
+                @click="showProfileMenu = !showProfileMenu"
+                class="h-8 w-8 p-0 rounded-full bg-muted hover:bg-muted/80"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+              </Button>
+              <Card
+                v-if="showProfileMenu"
+                class="absolute right-0 top-10 z-50 w-48 p-1"
+              >
+                <CardContent class="p-0">
+                  <Button
+                    variant="ghost"
+                    @click="exportData; showProfileMenu = false"
+                    class="w-full justify-start text-sm py-1 px-3 h-8"
+                  >
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Export
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    @click="handleLogout; showProfileMenu = false"
+                    class="w-full justify-start text-sm py-1 px-3 h-8"
+                  >
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Logout
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
-
+      </div>
+      
+      <!-- Stats Panel -->
+      <div class="border-t border-border bg-muted/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+          <div class="flex flex-wrap items-center gap-6 text-sm">
+            <div class="flex items-center gap-2">
+              <span v-if="isLoading" class="h-5 w-8 rounded bg-muted animate-pulse"></span>
+              <span v-else class="text-lg font-semibold text-foreground">{{ scribeStats.total }}</span>
+              <span class="text-muted-foreground">Total scribes</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span v-if="isLoading" class="h-5 w-8 rounded bg-muted animate-pulse"></span>
+              <span v-else class="text-lg font-semibold text-foreground">{{ scribeStats.shared }}</span>
+              <span class="text-muted-foreground">Shared with you</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span v-if="isLoading" class="h-5 w-8 rounded bg-muted animate-pulse"></span>
+              <span v-else class="text-lg font-semibold text-foreground">{{ scribeStats.totalDocuments }}</span>
+              <span class="text-muted-foreground">Documents saved</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -66,19 +90,19 @@
             class="pl-10"
           />
         </div>
-        <div class="flex flex-wrap gap-2">
+        <div class="flex items-center gap-2">
           <Button
             v-for="option in filterOptions"
             :key="option.value"
             @click="handleFilterChange(option.value)"
-            :variant="filterMode === option.value ? 'default' : 'ghost'"
+            :variant="filterMode === option.value ? 'default' : 'outline'"
             size="sm"
-            class="relative"
+            class="relative h-9 px-4"
           >
-            {{ option.label }}
+            <span>{{ option.label }}</span>
             <Badge 
               :variant="filterMode === option.value ? 'secondary' : 'outline'"
-              class="ml-2 h-5 px-1.5 text-[10px]"
+              class="ml-2 h-5 min-w-[20px] px-1.5 text-xs font-semibold"
             >
               {{ filterCounts[option.value] }}
             </Badge>
@@ -94,14 +118,30 @@
               :key="n"
               class="animate-pulse"
             >
-              <CardContent class="p-6 space-y-4">
-                <div class="h-10 w-10 rounded-lg bg-muted"></div>
-                <div class="h-4 w-3/4 rounded bg-muted"></div>
-                <div class="h-4 w-full rounded bg-muted"></div>
-                <div class="h-3 w-2/3 rounded bg-muted"></div>
-                <div class="flex items-center justify-between pt-4 border-t border-border">
-                  <div class="h-3 w-20 rounded bg-muted"></div>
-                  <div class="h-3 w-16 rounded bg-muted"></div>
+              <CardContent class="p-5">
+                <!-- Header -->
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-center gap-3">
+                    <div class="h-12 w-12 rounded-lg bg-muted"></div>
+                    <div class="space-y-2">
+                      <div class="h-4 w-32 rounded bg-muted"></div>
+                      <div class="h-3 w-24 rounded bg-muted"></div>
+                    </div>
+                  </div>
+                  <div class="h-8 w-8 rounded bg-muted"></div>
+                </div>
+
+                <!-- Body -->
+                <div class="mt-4 space-y-2">
+                  <div class="h-4 w-full rounded bg-muted"></div>
+                  <div class="h-4 w-5/6 rounded bg-muted"></div>
+                  <div class="h-4 w-4/6 rounded bg-muted"></div>
+                </div>
+
+                <!-- Footer -->
+                <div class="mt-4 flex flex-wrap gap-2">
+                  <div class="h-6 w-16 rounded-full bg-muted"></div>
+                  <div class="h-6 w-20 rounded-full bg-muted"></div>
                 </div>
               </CardContent>
             </Card>
@@ -181,15 +221,24 @@
                     </Button>
                     <Card
                       v-if="menuOpen === s.id"
-                      class="absolute right-0 top-10 z-50 w-44 p-1"
+                      class="absolute right-0 top-10 z-50 w-48 p-1"
                     >
                       <CardContent class="p-0">
                         <template v-if="!s.is_shared">
-                          <Button variant="ghost" @click.stop="handleEdit(s)" class="w-full justify-start text-sm">Edit</Button>
-                          <Button variant="ghost" @click.stop="handleShare(s)" class="w-full justify-start text-sm">Share</Button>
-                          <Button variant="ghost" @click.stop="handleDelete(s)" class="w-full justify-start text-sm text-destructive">Delete</Button>
+                          <Button variant="ghost" @click.stop="handleEdit(s)" class="w-full justify-start text-sm py-1 px-3 h-8">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                            Edit
+                          </Button>
+                          <Button variant="ghost" @click.stop="handleShare(s)" class="w-full justify-start text-sm py-1 px-3 h-8">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                            Share
+                          </Button>
+                          <Button variant="ghost" @click.stop="handleDelete(s)" class="w-full justify-start text-sm text-destructive py-1 px-3 h-8">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            Delete
+                          </Button>
                         </template>
-                        <div v-else class="px-3 py-2 text-xs text-muted-foreground">Shared by {{ s.shared_by_user_email || 'a collaborator' }}</div>
+                        <div v-else class="px-3 py-1.5 text-xs text-muted-foreground">Shared by {{ s.shared_by_user_email || 'a collaborator' }}</div>
                       </CardContent>
                     </Card>
                   </div>
@@ -262,6 +311,7 @@ const isLoading = ref(false)
 const loadError = ref<string | null>(null)
 const showCreateModal = ref(false)
 const showShareModal = ref(false)
+const showProfileMenu = ref(false)
 const selectedScribeForShare = ref<any>(null)
 const filterMode = ref<FilterMode>('all')
 const filterOptions = [
@@ -384,6 +434,10 @@ function handleClickOutside(e: MouseEvent) {
   // Close menu if clicking outside the menu container
   if (!target.closest('[data-menu-container]')) {
     menuOpen.value = null
+  }
+  // Close profile menu if clicking outside
+  if (!target.closest('[data-profile-menu]')) {
+    showProfileMenu.value = false
   }
 }
 

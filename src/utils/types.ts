@@ -48,12 +48,13 @@ export interface Annotation {
 
 export interface Scribe {
   id: string
-  document_id: string
+  document_id?: string
   user_id: string
   name: string
   model: string
   temperature: number
   system_prompt?: string
+  editor_content?: string
   message_count: number
   total_tokens: number
   created_at: string
@@ -184,6 +185,7 @@ export interface CreateScribeInput {
   model?: string
   temperature?: number
   system_prompt?: string
+  editor_content?: string
 }
 
 export interface CreateScribeMessageInput {

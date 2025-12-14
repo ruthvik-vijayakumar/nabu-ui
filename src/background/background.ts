@@ -377,7 +377,7 @@ class BackgroundService {
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
+            background: hsla(0, 0%, 3.9%, 0.8);
             backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
@@ -404,8 +404,8 @@ class BackgroundService {
           
           modal.innerHTML = `
             <div style="
-              background: hsl(222.2, 84%, 4.9%);
-              border: 1px solid hsl(217.2, 32.6%, 17.5%);
+              background: hsl(0, 0%, 9.5%);
+              border: 1px solid hsl(0, 0%, 25%);
               border-radius: 0.5rem;
               box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
               max-width: 448px;
@@ -416,7 +416,7 @@ class BackgroundService {
             ">
               <div style="
                 padding: 16px;
-                border-bottom: 1px solid hsl(217.2, 32.6%, 17.5%);
+                border-bottom: 1px solid hsl(0, 0%, 25%);
               ">
                 <div style="
                   display: flex;
@@ -426,12 +426,12 @@ class BackgroundService {
                   <h3 style="
                     font-size: 18px;
                     font-weight: 600;
-                    color: hsl(210, 40%, 98%);
+                    color: hsl(0, 0%, 98%);
                     margin: 0;
                     letter-spacing: -0.025em;
                   ">Save Text</h3>
                   <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="
-                    color: hsl(215, 20.2%, 65.1%);
+                    color: hsl(0, 0%, 63.9%);
                     background: transparent;
                     border: none;
                     cursor: pointer;
@@ -441,7 +441,7 @@ class BackgroundService {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                  " onmouseover="this.style.backgroundColor='hsl(217.2, 32.6%, 17.5%)'; this.style.color='hsl(210, 40%, 98%)'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='hsl(215, 20.2%, 65.1%)'">
+                  " onmouseover="this.style.backgroundColor='hsl(0, 0%, 15%)'; this.style.color='hsl(0, 0%, 98%)'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='hsl(0, 0%, 63.9%)'">
                     <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
@@ -455,16 +455,16 @@ class BackgroundService {
                     display: block;
                     font-size: 14px;
                     font-weight: 500;
-                    color: hsl(210, 40%, 98%);
+                    color: hsl(0, 0%, 98%);
                     margin-bottom: 8px;
                   ">Selected Text</label>
                   <div style="
-                    background: hsl(222.2, 84%, 4.9%);
-                    border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                    background: hsl(0, 0%, 9.5%);
+                    border: 1px solid hsl(0, 0%, 25%);
                     border-radius: 0.5rem;
                     padding: 12px;
                     font-size: 14px;
-                    color: hsl(210, 40%, 98%);
+                    color: hsl(0, 0%, 98%);
                     max-height: 128px;
                     overflow-y: auto;
                     white-space: pre-wrap;
@@ -477,16 +477,16 @@ class BackgroundService {
                     display: block;
                     font-size: 14px;
                     font-weight: 500;
-                    color: hsl(210, 40%, 98%);
+                    color: hsl(0, 0%, 98%);
                     margin-bottom: 8px;
                   ">Page URL</label>
                   <div style="
-                    background: hsl(222.2, 84%, 4.9%);
-                    border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                    background: hsl(0, 0%, 9.5%);
+                    border: 1px solid hsl(0, 0%, 25%);
                     border-radius: 0.5rem;
                     padding: 12px;
                     font-size: 13px;
-                    color: hsl(215, 20.2%, 65.1%);
+                    color: hsl(0, 0%, 63.9%);
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap;
@@ -499,42 +499,42 @@ class BackgroundService {
                     display: block;
                     font-size: 14px;
                     font-weight: 500;
-                    color: hsl(210, 40%, 98%);
+                    color: hsl(0, 0%, 98%);
                     margin-bottom: 8px;
                   ">Scribe</label>
                   <select id="scribeSelect" style="
                     width: 100%;
                     padding: 10px 12px;
-                    border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                    border: 1px solid hsl(0, 0%, 25%);
                     border-radius: 0.5rem;
                     font-size: 14px;
                     outline: none;
                     box-sizing: border-box;
-                    background: hsl(222.2, 84%, 4.9%);
-                    color: hsl(210, 40%, 98%);
+                    background: hsl(0, 0%, 9.5%);
+                    color: hsl(0, 0%, 98%);
                     transition: all 0.2s;
-                  " onfocus="this.style.outline='2px solid hsl(224.3, 76.3%, 48%)'; this.style.outlineOffset='2px'" onblur="this.style.outline='none'"></select>
+                  " onfocus="this.style.outline='2px solid hsl(0, 0%, 83.1%)'; this.style.outlineOffset='2px'; this.style.borderColor='hsl(0, 0%, 83.1%)'" onblur="this.style.outline='none'; this.style.borderColor='hsl(0, 0%, 25%)'"></select>
                   <div style="margin-top: 10px; display: none;" id="newScribeRow">
                     <input type="text" id="scribeName" style="
                       width: 100%; 
                       padding: 10px 12px; 
-                      border: 1px solid hsl(217.2, 32.6%, 17.5%); 
+                      border: 1px solid hsl(0, 0%, 25%); 
                       border-radius: 0.5rem; 
                       font-size: 14px; 
                       outline: none; 
                       box-sizing: border-box; 
-                      background: hsl(222.2, 84%, 4.9%); 
-                      color: hsl(210, 40%, 98%);
+                      background: hsl(0, 0%, 9.5%); 
+                      color: hsl(0, 0%, 98%);
                       transition: all 0.2s;
-                    " placeholder="New scribe name" onfocus="this.style.outline='2px solid hsl(224.3, 76.3%, 48%)'; this.style.outlineOffset='2px'; this.style.borderColor='hsl(224.3, 76.3%, 48%)'" onblur="this.style.outline='none'; this.style.borderColor='hsl(217.2, 32.6%, 17.5%)'">
+                    " placeholder="New scribe name" onfocus="this.style.outline='2px solid hsl(0, 0%, 83.1%)'; this.style.outlineOffset='2px'; this.style.borderColor='hsl(0, 0%, 83.1%)'" onblur="this.style.outline='none'; this.style.borderColor='hsl(0, 0%, 25%)'">
                   </div>
                 </div>
                 
                 <div style="display: flex; gap: 12px;">
                   <button id="saveBtn" style="
                     flex: 1;
-                    background: hsl(217.2, 91.2%, 59.8%);
-                    color: hsl(222.2, 47.4%, 11.2%);
+                    background: hsl(0, 0%, 98%);
+                    color: hsl(0, 0%, 9%);
                     padding: 10px 16px;
                     border: none;
                     border-radius: 0.5rem;
@@ -546,7 +546,7 @@ class BackgroundService {
                     align-items: center;
                     justify-content: center;
                     gap: 8px;
-                  " onmouseover="this.style.backgroundColor='hsl(217.2, 91.2%, 54.8%)'" onmouseout="this.style.backgroundColor='hsl(217.2, 91.2%, 59.8%)'">
+                  " onmouseover="this.style.backgroundColor='hsl(0, 0%, 90%)'" onmouseout="this.style.backgroundColor='hsl(0, 0%, 98%)'">
                     <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
                     </svg>
@@ -555,9 +555,9 @@ class BackgroundService {
                   <button onclick="window.open('https://nabu-ai.com/dashboard', '_blank')" style="
                     flex: 1;
                     background: transparent;
-                    color: hsl(210, 40%, 98%);
+                    color: hsl(0, 0%, 98%);
                     padding: 10px 16px;
-                    border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                    border: 1px solid hsl(0, 0%, 25%);
                     border-radius: 0.5rem;
                     font-size: 14px;
                     font-weight: 500;
@@ -567,7 +567,7 @@ class BackgroundService {
                     align-items: center;
                     justify-content: center;
                     gap: 8px;
-                  " onmouseover="this.style.backgroundColor='hsl(217.2, 32.6%, 17.5%)'" onmouseout="this.style.backgroundColor='transparent'">
+                  " onmouseover="this.style.backgroundColor='hsl(0, 0%, 15%)'" onmouseout="this.style.backgroundColor='transparent'">
                     <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
                     </svg>
@@ -638,8 +638,8 @@ class BackgroundService {
                         // Show success message
                         modal.innerHTML = `
                           <div style="
-                            background: hsl(222.2, 84%, 4.9%);
-                            border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                            background: hsl(0, 0%, 9.5%);
+                            border: 1px solid hsl(0, 0%, 25%);
                             border-radius: 0.5rem;
                             padding: 24px;
                             max-width: 384px;
@@ -650,33 +650,33 @@ class BackgroundService {
                             <div style="
                               width: 64px;
                               height: 64px;
-                              background: rgba(16, 185, 129, 0.1);
+                              background: hsl(0, 0%, 15%);
                               border-radius: 50%;
                               display: flex;
                               align-items: center;
                               justify-content: center;
                               margin: 0 auto 16px;
                             ">
-                              <svg width="32" height="32" fill="none" stroke="#10b981" stroke-width="2.5" viewBox="0 0 24 24">
+                              <svg width="32" height="32" fill="none" stroke="hsl(0, 0%, 98%)" stroke-width="2.5" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                               </svg>
                             </div>
                             <h3 style="
                               font-size: 20px;
                               font-weight: 600;
-                              color: hsl(210, 40%, 98%);
+                              color: hsl(0, 0%, 98%);
                               margin: 0 0 8px;
                             ">Saved to NabuAI!</h3>
                             <p style="
                               font-size: 14px;
-                              color: hsl(215, 20.2%, 65.1%);
+                              color: hsl(0, 0%, 63.9%);
                               margin: 0 0 24px;
                               line-height: 1.5;
                             ">Your text has been successfully saved.</p>
                             <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="
                               width: 100%;
-                              background: hsl(217.2, 91.2%, 59.8%);
-                              color: hsl(222.2, 47.4%, 11.2%);
+                              background: hsl(0, 0%, 98%);
+                              color: hsl(0, 0%, 9%);
                               padding: 10px 16px;
                               border: none;
                               border-radius: 0.5rem;
@@ -684,7 +684,7 @@ class BackgroundService {
                               font-weight: 500;
                               cursor: pointer;
                               transition: all 0.2s;
-                            " onmouseover="this.style.backgroundColor='hsl(217.2, 91.2%, 54.8%)'" onmouseout="this.style.backgroundColor='hsl(217.2, 91.2%, 59.8%)'">
+                            " onmouseover="this.style.backgroundColor='hsl(0, 0%, 90%)'" onmouseout="this.style.backgroundColor='hsl(0, 0%, 98%)'">
                               Continue
                             </button>
                           </div>
@@ -694,8 +694,8 @@ class BackgroundService {
                         // Show error message
                         modal.innerHTML = `
                           <div style="
-                            background: hsl(222.2, 84%, 4.9%);
-                            border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                            background: hsl(0, 0%, 9.5%);
+                            border: 1px solid hsl(0, 0%, 25%);
                             border-radius: 0.5rem;
                             padding: 24px;
                             max-width: 384px;
@@ -706,33 +706,33 @@ class BackgroundService {
                             <div style="
                               width: 64px;
                               height: 64px;
-                              background: rgba(220, 38, 38, 0.1);
+                              background: hsl(0, 62.8%, 30.6%);
                               border-radius: 50%;
                               display: flex;
                               align-items: center;
                               justify-content: center;
                               margin: 0 auto 16px;
                             ">
-                              <svg width="32" height="32" fill="none" stroke="#dc2626" stroke-width="2.5" viewBox="0 0 24 24">
+                              <svg width="32" height="32" fill="none" stroke="hsl(0, 0%, 98%)" stroke-width="2.5" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
                               </svg>
                             </div>
                             <h3 style="
                               font-size: 20px;
                               font-weight: 600;
-                              color: hsl(210, 40%, 98%);
+                              color: hsl(0, 0%, 98%);
                               margin: 0 0 8px;
                             ">Save Failed</h3>
                             <p style="
                               font-size: 14px;
-                              color: hsl(215, 20.2%, 65.1%);
+                              color: hsl(0, 0%, 63.9%);
                               margin: 0 0 24px;
                               line-height: 1.5;
                             ">There was an error saving your content. Please try again.</p>
                             <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="
                               width: 100%;
                               background: hsl(0, 62.8%, 30.6%);
-                              color: hsl(210, 40%, 98%);
+                              color: hsl(0, 0%, 98%);
                               padding: 10px 16px;
                               border: none;
                               border-radius: 0.5rem;
@@ -862,7 +862,7 @@ class BackgroundService {
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
+            background: hsla(0, 0%, 3.9%, 0.8);
             backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
@@ -877,8 +877,8 @@ class BackgroundService {
 
           modal.innerHTML = `
             <div style="
-              background: hsl(222.2, 84%, 4.9%);
-              border: 1px solid hsl(217.2, 32.6%, 17.5%);
+              background: hsl(0, 0%, 9.5%);
+              border: 1px solid hsl(0, 0%, 25%);
               border-radius: 0.5rem;
               box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
               max-width: 448px;
@@ -889,7 +889,7 @@ class BackgroundService {
             ">
               <div style="
                 padding: 16px;
-                border-bottom: 1px solid hsl(217.2, 32.6%, 17.5%);
+                border-bottom: 1px solid hsl(0, 0%, 25%);
               ">
                 <div style="
                   display: flex;
@@ -899,12 +899,12 @@ class BackgroundService {
                   <h3 style="
                     font-size: 18px;
                     font-weight: 600;
-                    color: hsl(210, 40%, 98%);
+                    color: hsl(0, 0%, 98%);
                     margin: 0;
                     letter-spacing: -0.025em;
                   ">Save ${data.type === 'image' ? 'Image' : 'Video'}</h3>
                   <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="
-                    color: hsl(215, 20.2%, 65.1%);
+                    color: hsl(0, 0%, 63.9%);
                     background: transparent;
                     border: none;
                     cursor: pointer;
@@ -914,7 +914,7 @@ class BackgroundService {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                  " onmouseover="this.style.backgroundColor='hsl(217.2, 32.6%, 17.5%)'; this.style.color='hsl(210, 40%, 98%)'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='hsl(215, 20.2%, 65.1%)'">
+                  " onmouseover="this.style.backgroundColor='hsl(0, 0%, 15%)'; this.style.color='hsl(0, 0%, 98%)'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='hsl(0, 0%, 63.9%)'">
                     <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
@@ -928,10 +928,10 @@ class BackgroundService {
                     display: block;
                     font-size: 14px;
                     font-weight: 500;
-                    color: hsl(210, 40%, 98%);
+                    color: hsl(0, 0%, 98%);
                     margin-bottom: 8px;
                   ">Preview</label>
-                  <div style="background: hsl(222.2, 84%, 4.9%); padding: 8px; border-radius: 0.5rem; border: 1px solid hsl(217.2, 32.6%, 17.5%);">
+                  <div style="background: hsl(0, 0%, 9.5%); padding: 8px; border-radius: 0.5rem; border: 1px solid hsl(0, 0%, 25%);">
                     ${mediaPreview}
                   </div>
                 </div>
@@ -941,16 +941,16 @@ class BackgroundService {
                     display: block;
                     font-size: 14px;
                     font-weight: 500;
-                    color: hsl(210, 40%, 98%);
+                    color: hsl(0, 0%, 98%);
                     margin-bottom: 8px;
                   ">Media URL</label>
                   <div style="
-                    background: hsl(222.2, 84%, 4.9%);
-                    border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                    background: hsl(0, 0%, 9.5%);
+                    border: 1px solid hsl(0, 0%, 25%);
                     border-radius: 0.5rem;
                     padding: 12px;
                     font-size: 13px;
-                    color: hsl(215, 20.2%, 65.1%);
+                    color: hsl(0, 0%, 63.9%);
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap;
@@ -963,42 +963,42 @@ class BackgroundService {
                     display: block;
                     font-size: 14px;
                     font-weight: 500;
-                    color: hsl(210, 40%, 98%);
+                    color: hsl(0, 0%, 98%);
                     margin-bottom: 8px;
                   ">Scribe</label>
                   <select id="scribeSelect" style="
                     width: 100%;
                     padding: 10px 12px;
-                    border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                    border: 1px solid hsl(0, 0%, 25%);
                     border-radius: 0.5rem;
                     font-size: 14px;
                     outline: none;
                     box-sizing: border-box;
-                    background: hsl(222.2, 84%, 4.9%);
-                    color: hsl(210, 40%, 98%);
+                    background: hsl(0, 0%, 9.5%);
+                    color: hsl(0, 0%, 98%);
                     transition: all 0.2s;
-                  " onfocus="this.style.outline='2px solid hsl(224.3, 76.3%, 48%)'; this.style.outlineOffset='2px'" onblur="this.style.outline='none'"></select>
+                  " onfocus="this.style.outline='2px solid hsl(0, 0%, 83.1%)'; this.style.outlineOffset='2px'; this.style.borderColor='hsl(0, 0%, 83.1%)'" onblur="this.style.outline='none'; this.style.borderColor='hsl(0, 0%, 25%)'"></select>
                   <div style="margin-top: 10px; display: none;" id="newScribeRow">
                     <input type="text" id="scribeName" style="
                       width: 100%; 
                       padding: 10px 12px; 
-                      border: 1px solid hsl(217.2, 32.6%, 17.5%); 
+                      border: 1px solid hsl(0, 0%, 25%); 
                       border-radius: 0.5rem; 
                       font-size: 14px; 
                       outline: none; 
                       box-sizing: border-box; 
-                      background: hsl(222.2, 84%, 4.9%); 
-                      color: hsl(210, 40%, 98%);
+                      background: hsl(0, 0%, 9.5%); 
+                      color: hsl(0, 0%, 98%);
                       transition: all 0.2s;
-                    " placeholder="New scribe name" onfocus="this.style.outline='2px solid hsl(224.3, 76.3%, 48%)'; this.style.outlineOffset='2px'; this.style.borderColor='hsl(224.3, 76.3%, 48%)'" onblur="this.style.outline='none'; this.style.borderColor='hsl(217.2, 32.6%, 17.5%)'">
+                    " placeholder="New scribe name" onfocus="this.style.outline='2px solid hsl(0, 0%, 83.1%)'; this.style.outlineOffset='2px'; this.style.borderColor='hsl(0, 0%, 83.1%)'" onblur="this.style.outline='none'; this.style.borderColor='hsl(0, 0%, 25%)'">
                   </div>
                 </div>
                 
                 <div style="display: flex; gap: 12px;">
                   <button id="saveBtn" style="
                     flex: 1;
-                    background: hsl(217.2, 91.2%, 59.8%);
-                    color: hsl(222.2, 47.4%, 11.2%);
+                    background: hsl(0, 0%, 98%);
+                    color: hsl(0, 0%, 9%);
                     padding: 10px 16px;
                     border: none;
                     border-radius: 0.5rem;
@@ -1010,7 +1010,7 @@ class BackgroundService {
                     align-items: center;
                     justify-content: center;
                     gap: 8px;
-                  " onmouseover="this.style.backgroundColor='hsl(217.2, 91.2%, 54.8%)'" onmouseout="this.style.backgroundColor='hsl(217.2, 91.2%, 59.8%)'">
+                  " onmouseover="this.style.backgroundColor='hsl(0, 0%, 90%)'" onmouseout="this.style.backgroundColor='hsl(0, 0%, 98%)'">
                     <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
                     </svg>
@@ -1019,9 +1019,9 @@ class BackgroundService {
                   <button onclick="window.open('https://nabu-ai.com/dashboard', '_blank')" style="
                     flex: 1;
                     background: transparent;
-                    color: hsl(210, 40%, 98%);
+                    color: hsl(0, 0%, 98%);
                     padding: 10px 16px;
-                    border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                    border: 1px solid hsl(0, 0%, 25%);
                     border-radius: 0.5rem;
                     font-size: 14px;
                     font-weight: 500;
@@ -1031,7 +1031,7 @@ class BackgroundService {
                     align-items: center;
                     justify-content: center;
                     gap: 8px;
-                  " onmouseover="this.style.backgroundColor='hsl(217.2, 32.6%, 17.5%)'" onmouseout="this.style.backgroundColor='transparent'">
+                  " onmouseover="this.style.backgroundColor='hsl(0, 0%, 15%)'" onmouseout="this.style.backgroundColor='transparent'">
                     <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
                     </svg>
@@ -1128,8 +1128,8 @@ class BackgroundService {
                   // Show success message
                   modal.innerHTML = `
                     <div style="
-                      background: hsl(222.2, 84%, 4.9%);
-                      border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                      background: hsl(0, 0%, 9.5%);
+                      border: 1px solid hsl(0, 0%, 25%);
                       border-radius: 0.5rem;
                       padding: 24px;
                       max-width: 384px;
@@ -1140,33 +1140,33 @@ class BackgroundService {
                       <div style="
                         width: 64px;
                         height: 64px;
-                        background: rgba(16, 185, 129, 0.1);
+                        background: hsl(0, 0%, 15%);
                         border-radius: 50%;
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         margin: 0 auto 16px;
                       ">
-                        <svg width="32" height="32" fill="none" stroke="#10b981" stroke-width="2.5" viewBox="0 0 24 24">
+                        <svg width="32" height="32" fill="none" stroke="hsl(0, 0%, 98%)" stroke-width="2.5" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                         </svg>
                       </div>
                       <h3 style="
                         font-size: 20px;
                         font-weight: 600;
-                        color: hsl(210, 40%, 98%);
+                        color: hsl(0, 0%, 98%);
                         margin: 0 0 8px;
                       ">Saved to NabuAI!</h3>
                       <p style="
                         font-size: 14px;
-                        color: hsl(215, 20.2%, 65.1%);
+                        color: hsl(0, 0%, 63.9%);
                         margin: 0 0 24px;
                         line-height: 1.5;
                       ">Your ${data.type} has been successfully saved.</p>
                       <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="
                         width: 100%;
-                        background: hsl(217.2, 91.2%, 59.8%);
-                        color: hsl(222.2, 47.4%, 11.2%);
+                        background: hsl(0, 0%, 98%);
+                        color: hsl(0, 0%, 9%);
                         padding: 10px 16px;
                         border: none;
                         border-radius: 0.5rem;
@@ -1174,7 +1174,7 @@ class BackgroundService {
                         font-weight: 500;
                         cursor: pointer;
                         transition: all 0.2s;
-                      " onmouseover="this.style.backgroundColor='hsl(217.2, 91.2%, 54.8%)'" onmouseout="this.style.backgroundColor='hsl(217.2, 91.2%, 59.8%)'">
+                      " onmouseover="this.style.backgroundColor='hsl(0, 0%, 90%)'" onmouseout="this.style.backgroundColor='hsl(0, 0%, 98%)'">
                         Continue
                       </button>
                     </div>
@@ -1183,8 +1183,8 @@ class BackgroundService {
                   // Show error message
                   modal.innerHTML = `
                     <div style="
-                      background: hsl(222.2, 84%, 4.9%);
-                      border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                      background: hsl(0, 0%, 9.5%);
+                      border: 1px solid hsl(0, 0%, 25%);
                       border-radius: 0.5rem;
                       padding: 24px;
                       max-width: 384px;
@@ -1195,33 +1195,33 @@ class BackgroundService {
                       <div style="
                         width: 64px;
                         height: 64px;
-                        background: rgba(220, 38, 38, 0.1);
+                        background: hsl(0, 62.8%, 30.6%);
                         border-radius: 50%;
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         margin: 0 auto 16px;
                       ">
-                        <svg width="32" height="32" fill="none" stroke="#dc2626" stroke-width="2.5" viewBox="0 0 24 24">
+                        <svg width="32" height="32" fill="none" stroke="hsl(0, 0%, 98%)" stroke-width="2.5" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                       </div>
                       <h3 style="
                         font-size: 20px;
                         font-weight: 600;
-                        color: hsl(210, 40%, 98%);
+                        color: hsl(0, 0%, 98%);
                         margin: 0 0 8px;
                       ">Save Failed</h3>
                       <p style="
                         font-size: 14px;
-                        color: hsl(215, 20.2%, 65.1%);
+                        color: hsl(0, 0%, 63.9%);
                         margin: 0 0 24px;
                         line-height: 1.5;
                       ">There was an error saving your content. Please try again.</p>
                       <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="
                         width: 100%;
                         background: hsl(0, 62.8%, 30.6%);
-                        color: hsl(210, 40%, 98%);
+                        color: hsl(0, 0%, 98%);
                         padding: 10px 16px;
                         border: none;
                         border-radius: 0.5rem;
@@ -1321,8 +1321,8 @@ class BackgroundService {
           
           modal.innerHTML = `
             <div style="
-              background: hsl(222.2, 84%, 4.9%);
-              border: 1px solid hsl(217.2, 32.6%, 17.5%);
+              background: hsl(0, 0%, 9.5%);
+              border: 1px solid hsl(0, 0%, 25%);
               border-radius: 0.5rem;
               padding: 24px;
               max-width: 384px;
@@ -1333,33 +1333,33 @@ class BackgroundService {
               <div style="
                 width: 64px;
                 height: 64px;
-                background: rgba(220, 38, 38, 0.1);
+                background: hsl(0, 62.8%, 30.6%);
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 margin: 0 auto 16px;
               ">
-                <svg width="32" height="32" fill="none" stroke="#dc2626" stroke-width="2.5" viewBox="0 0 24 24">
+                <svg width="32" height="32" fill="none" stroke="hsl(0, 0%, 98%)" stroke-width="2.5" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
               </div>
               <h3 style="
                 font-size: 20px;
                 font-weight: 600;
-                color: hsl(210, 40%, 98%);
+                color: hsl(0, 0%, 98%);
                 margin: 0 0 8px;
               ">Screenshot Failed</h3>
               <p style="
                 font-size: 14px;
-                color: hsl(215, 20.2%, 65.1%);
+                color: hsl(0, 0%, 63.9%);
                 margin: 0 0 24px;
                 line-height: 1.5;
               ">Unable to capture screenshot. Please try again.</p>
               <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="
                 width: 100%;
                 background: hsl(0, 62.8%, 30.6%);
-                color: hsl(210, 40%, 98%);
+                color: hsl(0, 0%, 98%);
                 padding: 10px 16px;
                 border: none;
                 border-radius: 0.5rem;
@@ -1631,7 +1631,7 @@ class BackgroundService {
               left: 0;
               width: 100vw;
               height: 100vh;
-              background: rgba(0, 0, 0, 0.7);
+              background: hsla(0, 0%, 3.9%, 0.8);
               backdrop-filter: blur(8px);
               display: flex;
               align-items: center;
@@ -1642,8 +1642,8 @@ class BackgroundService {
             
             modal.innerHTML = `
               <div style="
-                background: hsl(222.2, 84%, 4.9%);
-                border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                background: hsl(0, 0%, 9.5%);
+                border: 1px solid hsl(0, 0%, 25%);
                 border-radius: 0.5rem;
                 box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
                 max-width: 500px;
@@ -1654,7 +1654,7 @@ class BackgroundService {
               ">
                 <div style="
                   padding: 16px;
-                  border-bottom: 1px solid hsl(217.2, 32.6%, 17.5%);
+                  border-bottom: 1px solid hsl(0, 0%, 25%);
                 ">
                   <div style="
                     display: flex;
@@ -1664,12 +1664,12 @@ class BackgroundService {
                     <h3 style="
                       font-size: 18px;
                       font-weight: 600;
-                      color: hsl(210, 40%, 98%);
+                      color: hsl(0, 0%, 98%);
                       margin: 0;
                       letter-spacing: -0.025em;
                     ">Save ${isPartial ? 'Partial ' : ''}Screenshot</h3>
                     <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="
-                      color: hsl(215, 20.2%, 65.1%);
+                      color: hsl(0, 0%, 63.9%);
                       background: transparent;
                       border: none;
                       cursor: pointer;
@@ -1679,7 +1679,7 @@ class BackgroundService {
                       display: flex;
                       align-items: center;
                       justify-content: center;
-                    " onmouseover="this.style.backgroundColor='hsl(217.2, 32.6%, 17.5%)'; this.style.color='hsl(210, 40%, 98%)'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='hsl(215, 20.2%, 65.1%)'">
+                    " onmouseover="this.style.backgroundColor='hsl(0, 0%, 25%)'; this.style.color='hsl(0, 0%, 98%)'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='hsl(0, 0%, 63.9%)'">
                       <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                       </svg>
@@ -1693,16 +1693,16 @@ class BackgroundService {
                       display: block;
                       font-size: 14px;
                       font-weight: 500;
-                      color: hsl(210, 40%, 98%);
+                      color: hsl(0, 0%, 98%);
                       margin-bottom: 8px;
                     ">Screenshot Preview</label>
                     <div style="
-                      border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                      border: 1px solid hsl(0, 0%, 25%);
                       border-radius: 0.5rem;
                       overflow: hidden;
                       max-height: 300px;
                       text-align: center;
-                      background: hsl(222.2, 84%, 4.9%);
+                      background: hsl(0, 0%, 9.5%);
                       padding: 8px;
                     ">
                       <img src="${dataUrl}" alt="Screenshot" style="
@@ -1719,16 +1719,16 @@ class BackgroundService {
                       display: block;
                       font-size: 14px;
                       font-weight: 500;
-                      color: hsl(210, 40%, 98%);
+                      color: hsl(0, 0%, 98%);
                       margin-bottom: 8px;
                     ">Page URL</label>
                     <div style="
-                      background: hsl(222.2, 84%, 4.9%);
-                      border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                      background: hsl(0, 0%, 9.5%);
+                      border: 1px solid hsl(0, 0%, 25%);
                       border-radius: 0.5rem;
                       padding: 12px;
                       font-size: 13px;
-                      color: hsl(215, 20.2%, 65.1%);
+                      color: hsl(0, 0%, 63.9%);
                       overflow: hidden;
                       text-overflow: ellipsis;
                       white-space: nowrap;
@@ -1741,42 +1741,42 @@ class BackgroundService {
                       display: block;
                       font-size: 14px;
                       font-weight: 500;
-                      color: hsl(210, 40%, 98%);
+                      color: hsl(0, 0%, 98%);
                       margin-bottom: 8px;
                     ">Scribe</label>
                     <select id="screenshot-scribeSelect" style="
                       width: 100%;
                       padding: 10px 12px;
-                      border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                      border: 1px solid hsl(0, 0%, 25%);
                       border-radius: 0.5rem;
                       font-size: 14px;
                       outline: none;
                       box-sizing: border-box;
-                      background: hsl(222.2, 84%, 4.9%);
-                      color: hsl(210, 40%, 98%);
+                      background: hsl(0, 0%, 9.5%);
+                      color: hsl(0, 0%, 98%);
                       transition: all 0.2s;
-                    " onfocus="this.style.outline='2px solid hsl(224.3, 76.3%, 48%)'; this.style.outlineOffset='2px'" onblur="this.style.outline='none'"></select>
+                    " onfocus="this.style.outline='2px solid hsl(0, 0%, 83.1%)'; this.style.outlineOffset='2px'" onblur="this.style.outline='none'"></select>
                     <div style="margin-top: 10px; display: none;" id="screenshot-newScribeRow">
                       <input type="text" id="screenshot-scribeName" style="
                         width: 100%; 
                         padding: 10px 12px; 
-                        border: 1px solid hsl(217.2, 32.6%, 17.5%); 
+                        border: 1px solid hsl(0, 0%, 25%); 
                         border-radius: 0.5rem; 
                         font-size: 14px; 
                         outline: none; 
                         box-sizing: border-box; 
-                        background: hsl(222.2, 84%, 4.9%); 
-                        color: hsl(210, 40%, 98%);
+                        background: hsl(0, 0%, 9.5%); 
+                        color: hsl(0, 0%, 98%);
                         transition: all 0.2s;
-                      " placeholder="New scribe name" onfocus="this.style.outline='2px solid hsl(224.3, 76.3%, 48%)'; this.style.outlineOffset='2px'; this.style.borderColor='hsl(224.3, 76.3%, 48%)'" onblur="this.style.outline='none'; this.style.borderColor='hsl(217.2, 32.6%, 17.5%)'">
+                      " placeholder="New scribe name" onfocus="this.style.outline='2px solid hsl(0, 0%, 83.1%)'; this.style.outlineOffset='2px'; this.style.borderColor='hsl(0, 0%, 83.1%)'" onblur="this.style.outline='none'; this.style.borderColor='hsl(0, 0%, 25%)'">
                     </div>
                   </div>
                   
                   <div style="display: flex; gap: 12px;">
                     <button id="saveScreenshotBtn" style="
                       flex: 1;
-                      background: hsl(217.2, 91.2%, 59.8%);
-                      color: hsl(222.2, 47.4%, 11.2%);
+                      background: hsl(0, 0%, 98%);
+                      color: hsl(0, 0%, 9%);
                       padding: 10px 16px;
                       border: none;
                       border-radius: 0.5rem;
@@ -1788,7 +1788,7 @@ class BackgroundService {
                       align-items: center;
                       justify-content: center;
                       gap: 8px;
-                    " onmouseover="this.style.backgroundColor='hsl(217.2, 91.2%, 54.8%)'" onmouseout="this.style.backgroundColor='hsl(217.2, 91.2%, 59.8%)'">
+                    " onmouseover="this.style.backgroundColor='hsl(0, 0%, 90%)'" onmouseout="this.style.backgroundColor='hsl(0, 0%, 98%)'">
                       <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
                       </svg>
@@ -1797,9 +1797,9 @@ class BackgroundService {
                     <button onclick="window.open('https://nabu-ai.com/dashboard', '_blank')" style="
                       flex: 1;
                       background: transparent;
-                      color: hsl(210, 40%, 98%);
+                      color: hsl(0, 0%, 98%);
                       padding: 10px 16px;
-                      border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                      border: 1px solid hsl(0, 0%, 25%);
                       border-radius: 0.5rem;
                       font-size: 14px;
                       font-weight: 500;
@@ -1809,7 +1809,7 @@ class BackgroundService {
                       align-items: center;
                       justify-content: center;
                       gap: 8px;
-                    " onmouseover="this.style.backgroundColor='hsl(217.2, 32.6%, 17.5%)'" onmouseout="this.style.backgroundColor='transparent'">
+                    " onmouseover="this.style.backgroundColor='hsl(0, 0%, 25%)'" onmouseout="this.style.backgroundColor='transparent'">
                       <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
                       </svg>
@@ -1913,8 +1913,8 @@ class BackgroundService {
                     // Show success message
                     modal.innerHTML = `
                       <div style="
-                        background: hsl(222.2, 84%, 4.9%);
-                        border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                        background: hsl(0, 0%, 9.5%);
+                        border: 1px solid hsl(0, 0%, 25%);
                         border-radius: 0.5rem;
                         padding: 24px;
                         max-width: 384px;
@@ -1925,33 +1925,33 @@ class BackgroundService {
                         <div style="
                           width: 64px;
                           height: 64px;
-                          background: rgba(16, 185, 129, 0.1);
+                          background: hsl(0, 0%, 15%);
                           border-radius: 50%;
                           display: flex;
                           align-items: center;
                           justify-content: center;
                           margin: 0 auto 16px;
                         ">
-                          <svg width="32" height="32" fill="none" stroke="#10b981" stroke-width="2.5" viewBox="0 0 24 24">
+                          <svg width="32" height="32" fill="none" stroke="hsl(0, 0%, 98%)" stroke-width="2.5" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                           </svg>
                         </div>
                         <h3 style="
                           font-size: 20px;
                           font-weight: 600;
-                          color: hsl(210, 40%, 98%);
+                          color: hsl(0, 0%, 98%);
                           margin: 0 0 8px;
                         ">Screenshot Saved!</h3>
                         <p style="
                           font-size: 14px;
-                          color: hsl(215, 20.2%, 65.1%);
+                          color: hsl(0, 0%, 63.9%);
                           margin: 0 0 24px;
                           line-height: 1.5;
                         ">Your ${isPartial ? 'partial ' : ''}screenshot has been successfully saved to NabuAI.</p>
                         <button id="continueBtn" style="
                           width: 100%;
-                          background: hsl(217.2, 91.2%, 59.8%);
-                          color: hsl(222.2, 47.4%, 11.2%);
+                          background: hsl(0, 0%, 98%);
+                          color: hsl(0, 0%, 9%);
                           padding: 10px 16px;
                           border: none;
                           border-radius: 0.5rem;
@@ -1959,7 +1959,7 @@ class BackgroundService {
                           font-weight: 500;
                           cursor: pointer;
                           transition: all 0.2s;
-                        " onmouseover="this.style.backgroundColor='hsl(217.2, 91.2%, 54.8%)'" onmouseout="this.style.backgroundColor='hsl(217.2, 91.2%, 59.8%)'">
+                        " onmouseover="this.style.backgroundColor='hsl(0, 0%, 90%)'" onmouseout="this.style.backgroundColor='hsl(0, 0%, 98%)'">
                           Continue
                         </button>
                       </div>
@@ -1980,8 +1980,8 @@ class BackgroundService {
                     // Show error message
                     modal.innerHTML = `
                       <div style="
-                        background: hsl(222.2, 84%, 4.9%);
-                        border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                        background: hsl(0, 0%, 9.5%);
+                        border: 1px solid hsl(0, 0%, 25%);
                         border-radius: 0.5rem;
                         padding: 24px;
                         max-width: 384px;
@@ -1992,33 +1992,33 @@ class BackgroundService {
                         <div style="
                           width: 64px;
                           height: 64px;
-                          background: rgba(220, 38, 38, 0.1);
+                          background: hsl(0, 62.8%, 30.6%);
                           border-radius: 50%;
                           display: flex;
                           align-items: center;
                           justify-content: center;
                           margin: 0 auto 16px;
                         ">
-                          <svg width="32" height="32" fill="none" stroke="#dc2626" stroke-width="2.5" viewBox="0 0 24 24">
+                          <svg width="32" height="32" fill="none" stroke="hsl(0, 0%, 98%)" stroke-width="2.5" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
                           </svg>
                         </div>
                         <h3 style="
                           font-size: 20px;
                           font-weight: 600;
-                          color: hsl(210, 40%, 98%);
+                          color: hsl(0, 0%, 98%);
                           margin: 0 0 8px;
                         ">Save Failed</h3>
                         <p style="
                           font-size: 14px;
-                          color: hsl(215, 20.2%, 65.1%);
+                          color: hsl(0, 0%, 63.9%);
                           margin: 0 0 24px;
                           line-height: 1.5;
                         ">There was an error saving your screenshot. Please try again.</p>
                         <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="
                           width: 100%;
                           background: hsl(0, 62.8%, 30.6%);
-                          color: hsl(210, 40%, 98%);
+                          color: hsl(0, 0%, 98%);
                           padding: 10px 16px;
                           border: none;
                           border-radius: 0.5rem;
@@ -2087,17 +2087,22 @@ class BackgroundService {
     console.log(`📄 Opening PDF in NabuAI viewer: ${pdfUrl}`)
     console.log(`🔗 Source URL: ${sourceUrl}`)
     
+    if (!pdfUrl || typeof pdfUrl !== 'string' || pdfUrl.trim() === '') {
+      throw new Error('PDF URL is required and must be a non-empty string')
+    }
+    
     try {
       // Create PDF viewer URL with parameters
       const viewerUrl = chrome.runtime.getURL('pdf-viewer.html')
       const params = new URLSearchParams({
         url: pdfUrl,
-        source: sourceUrl
+        source: sourceUrl || pdfUrl
       })
       
       const fullViewerUrl = `${viewerUrl}?${params.toString()}`
       
       console.log('🔗 Opening PDF viewer:', fullViewerUrl)
+      console.log('🔍 URL parameter value:', pdfUrl)
       
       // Open PDF viewer in new tab
       await chrome.tabs.create({
@@ -2108,6 +2113,7 @@ class BackgroundService {
       console.log('✅ PDF viewer opened successfully')
     } catch (error) {
       console.error('❌ Error opening PDF viewer:', error)
+      throw error
     }
   }
 
@@ -2166,8 +2172,8 @@ class BackgroundService {
           
           modal.innerHTML = `
             <div style="
-              background: hsl(222.2, 84%, 4.9%);
-              border: 1px solid hsl(217.2, 32.6%, 17.5%);
+              background: hsl(0, 0%, 9.5%);
+              border: 1px solid hsl(0, 0%, 25%);
               border-radius: 0.5rem;
               box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
               max-width: 500px;
@@ -2178,7 +2184,7 @@ class BackgroundService {
             ">
               <div style="
                 padding: 16px;
-                border-bottom: 1px solid hsl(217.2, 32.6%, 17.5%);
+                border-bottom: 1px solid hsl(0, 0%, 25%);
               ">
                 <div style="
                   display: flex;
@@ -2188,12 +2194,12 @@ class BackgroundService {
                   <h3 style="
                     font-size: 18px;
                     font-weight: 600;
-                    color: hsl(210, 40%, 98%);
+                    color: hsl(0, 0%, 98%);
                     margin: 0;
                     letter-spacing: -0.025em;
                   ">Save Screenshot to NabuAI</h3>
                   <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="
-                    color: hsl(215, 20.2%, 65.1%);
+                    color: hsl(0, 0%, 63.9%);
                     background: transparent;
                     border: none;
                     cursor: pointer;
@@ -2203,7 +2209,7 @@ class BackgroundService {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                  " onmouseover="this.style.backgroundColor='hsl(217.2, 32.6%, 17.5%)'; this.style.color='hsl(210, 40%, 98%)'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='hsl(215, 20.2%, 65.1%)'">
+                  " onmouseover="this.style.backgroundColor='hsl(0, 0%, 25%)'; this.style.color='hsl(0, 0%, 98%)'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='hsl(0, 0%, 63.9%)'">
                     <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
@@ -2217,16 +2223,16 @@ class BackgroundService {
                     display: block;
                     font-size: 14px;
                     font-weight: 500;
-                    color: hsl(210, 40%, 98%);
+                    color: hsl(0, 0%, 98%);
                     margin-bottom: 8px;
                   ">Screenshot Preview</label>
                   <div style="
-                    border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                    border: 1px solid hsl(0, 0%, 25%);
                     border-radius: 0.5rem;
                     overflow: hidden;
                     max-height: 300px;
                     text-align: center;
-                    background: hsl(222.2, 84%, 4.9%);
+                    background: hsl(0, 0%, 9.5%);
                     padding: 8px;
                   ">
                     <img src="${dataUrl}" alt="Screenshot" style="
@@ -2243,16 +2249,16 @@ class BackgroundService {
                     display: block;
                     font-size: 14px;
                     font-weight: 500;
-                    color: hsl(210, 40%, 98%);
+                    color: hsl(0, 0%, 98%);
                     margin-bottom: 8px;
                   ">Page URL</label>
                   <div style="
-                    background: hsl(222.2, 84%, 4.9%);
-                    border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                    background: hsl(0, 0%, 9.5%);
+                    border: 1px solid hsl(0, 0%, 25%);
                     border-radius: 0.5rem;
                     padding: 12px;
                     font-size: 13px;
-                    color: hsl(215, 20.2%, 65.1%);
+                    color: hsl(0, 0%, 63.9%);
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap;
@@ -2265,42 +2271,42 @@ class BackgroundService {
                     display: block;
                     font-size: 14px;
                     font-weight: 500;
-                    color: hsl(210, 40%, 98%);
+                    color: hsl(0, 0%, 98%);
                     margin-bottom: 8px;
                   ">Scribe</label>
                   <select id="screenshot-scribeSelect" style="
                     width: 100%;
                     padding: 10px 12px;
-                    border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                    border: 1px solid hsl(0, 0%, 25%);
                     border-radius: 0.5rem;
                     font-size: 14px;
                     outline: none;
                     box-sizing: border-box;
-                    background: hsl(222.2, 84%, 4.9%);
-                    color: hsl(210, 40%, 98%);
+                    background: hsl(0, 0%, 9.5%);
+                    color: hsl(0, 0%, 98%);
                     transition: all 0.2s;
-                  " onfocus="this.style.outline='2px solid hsl(224.3, 76.3%, 48%)'; this.style.outlineOffset='2px'" onblur="this.style.outline='none'"></select>
+                  " onfocus="this.style.outline='2px solid hsl(0, 0%, 83.1%)'; this.style.outlineOffset='2px'" onblur="this.style.outline='none'"></select>
                   <div style="margin-top: 10px; display: none;" id="screenshot-newScribeRow">
                     <input type="text" id="screenshot-scribeName" style="
                       width: 100%; 
                       padding: 10px 12px; 
-                      border: 1px solid hsl(217.2, 32.6%, 17.5%); 
+                      border: 1px solid hsl(0, 0%, 25%); 
                       border-radius: 0.5rem; 
                       font-size: 14px; 
                       outline: none; 
                       box-sizing: border-box; 
-                      background: hsl(222.2, 84%, 4.9%); 
-                      color: hsl(210, 40%, 98%);
+                      background: hsl(0, 0%, 9.5%); 
+                      color: hsl(0, 0%, 98%);
                       transition: all 0.2s;
-                    " placeholder="New scribe name" onfocus="this.style.outline='2px solid hsl(224.3, 76.3%, 48%)'; this.style.outlineOffset='2px'; this.style.borderColor='hsl(224.3, 76.3%, 48%)'" onblur="this.style.outline='none'; this.style.borderColor='hsl(217.2, 32.6%, 17.5%)'">
+                    " placeholder="New scribe name" onfocus="this.style.outline='2px solid hsl(0, 0%, 83.1%)'; this.style.outlineOffset='2px'; this.style.borderColor='hsl(0, 0%, 83.1%)'" onblur="this.style.outline='none'; this.style.borderColor='hsl(0, 0%, 25%)'">
                   </div>
                 </div>
                 
                 <div style="display: flex; gap: 12px;">
                   <button id="saveScreenshotBtn" style="
                     flex: 1;
-                    background: hsl(217.2, 91.2%, 59.8%);
-                    color: hsl(222.2, 47.4%, 11.2%);
+                    background: hsl(0, 0%, 98%);
+                    color: hsl(0, 0%, 9%);
                     padding: 10px 16px;
                     border: none;
                     border-radius: 0.5rem;
@@ -2308,21 +2314,21 @@ class BackgroundService {
                     font-weight: 500;
                     cursor: pointer;
                     transition: all 0.2s;
-                  " onmouseover="this.style.backgroundColor='hsl(217.2, 91.2%, 54.8%)'" onmouseout="this.style.backgroundColor='hsl(217.2, 91.2%, 59.8%)'">
+                  " onmouseover="this.style.backgroundColor='hsl(0, 0%, 90%)'" onmouseout="this.style.backgroundColor='hsl(0, 0%, 98%)'">
                     Save Screenshot
                   </button>
                   <button onclick="window.open('https://nabu-ai.com/dashboard', '_blank')" style="
                     flex: 1;
                     background: transparent;
-                    color: hsl(210, 40%, 98%);
+                    color: hsl(0, 0%, 98%);
                     padding: 10px 16px;
-                    border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                    border: 1px solid hsl(0, 0%, 25%);
                     border-radius: 0.5rem;
                     font-size: 14px;
                     font-weight: 500;
                     cursor: pointer;
                     transition: all 0.2s;
-                  " onmouseover="this.style.backgroundColor='hsl(217.2, 32.6%, 17.5%)'" onmouseout="this.style.backgroundColor='transparent'">
+                  " onmouseover="this.style.backgroundColor='hsl(0, 0%, 25%)'" onmouseout="this.style.backgroundColor='transparent'">
                     Go to Dashboard
                   </button>
                 </div>
@@ -2423,8 +2429,8 @@ class BackgroundService {
                   // Show success message
                   modal.innerHTML = `
                     <div style="
-                      background: hsl(222.2, 84%, 4.9%);
-                      border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                      background: hsl(0, 0%, 9.5%);
+                      border: 1px solid hsl(0, 0%, 25%);
                       border-radius: 0.5rem;
                       padding: 24px;
                       max-width: 384px;
@@ -2435,33 +2441,33 @@ class BackgroundService {
                       <div style="
                         width: 64px;
                         height: 64px;
-                        background: rgba(16, 185, 129, 0.1);
+                        background: hsl(0, 0%, 15%);
                         border-radius: 50%;
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         margin: 0 auto 16px;
                       ">
-                        <svg width="32" height="32" fill="none" stroke="#10b981" stroke-width="2.5" viewBox="0 0 24 24">
+                        <svg width="32" height="32" fill="none" stroke="hsl(0, 0%, 98%)" stroke-width="2.5" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                         </svg>
                       </div>
                       <h3 style="
                         font-size: 20px;
                         font-weight: 600;
-                        color: hsl(210, 40%, 98%);
+                        color: hsl(0, 0%, 98%);
                         margin: 0 0 8px;
                       ">Screenshot Saved!</h3>
                       <p style="
                         font-size: 14px;
-                        color: hsl(215, 20.2%, 65.1%);
+                        color: hsl(0, 0%, 63.9%);
                         margin: 0 0 24px;
                         line-height: 1.5;
                       ">Your screenshot has been successfully saved to NabuAI.</p>
                       <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="
                         width: 100%;
-                        background: hsl(217.2, 91.2%, 59.8%);
-                        color: hsl(222.2, 47.4%, 11.2%);
+                        background: hsl(0, 0%, 98%);
+                        color: hsl(0, 0%, 9%);
                         padding: 10px 16px;
                         border: none;
                         border-radius: 0.5rem;
@@ -2469,7 +2475,7 @@ class BackgroundService {
                         font-weight: 500;
                         cursor: pointer;
                         transition: all 0.2s;
-                      " onmouseover="this.style.backgroundColor='hsl(217.2, 91.2%, 54.8%)'" onmouseout="this.style.backgroundColor='hsl(217.2, 91.2%, 59.8%)'">
+                      " onmouseover="this.style.backgroundColor='hsl(0, 0%, 90%)'" onmouseout="this.style.backgroundColor='hsl(0, 0%, 98%)'">
                         Continue
                       </button>
                     </div>
@@ -2479,8 +2485,8 @@ class BackgroundService {
                   // Show error message
                   modal.innerHTML = `
                     <div style="
-                      background: hsl(222.2, 84%, 4.9%);
-                      border: 1px solid hsl(217.2, 32.6%, 17.5%);
+                      background: hsl(0, 0%, 9.5%);
+                      border: 1px solid hsl(0, 0%, 25%);
                       border-radius: 0.5rem;
                       padding: 24px;
                       max-width: 384px;
@@ -2491,33 +2497,33 @@ class BackgroundService {
                       <div style="
                         width: 64px;
                         height: 64px;
-                        background: rgba(220, 38, 38, 0.1);
+                        background: hsl(0, 62.8%, 30.6%);
                         border-radius: 50%;
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         margin: 0 auto 16px;
                       ">
-                        <svg width="32" height="32" fill="none" stroke="#dc2626" stroke-width="2.5" viewBox="0 0 24 24">
+                        <svg width="32" height="32" fill="none" stroke="hsl(0, 0%, 98%)" stroke-width="2.5" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                       </div>
                       <h3 style="
                         font-size: 20px;
                         font-weight: 600;
-                        color: hsl(210, 40%, 98%);
+                        color: hsl(0, 0%, 98%);
                         margin: 0 0 8px;
                       ">Save Failed</h3>
                       <p style="
                         font-size: 14px;
-                        color: hsl(215, 20.2%, 65.1%);
+                        color: hsl(0, 0%, 63.9%);
                         margin: 0 0 24px;
                         line-height: 1.5;
                       ">There was an error saving your screenshot. Please try again.</p>
                       <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="
                         width: 100%;
                         background: hsl(0, 62.8%, 30.6%);
-                        color: hsl(210, 40%, 98%);
+                        color: hsl(0, 0%, 98%);
                         padding: 10px 16px;
                         border: none;
                         border-radius: 0.5rem;
@@ -2656,6 +2662,41 @@ class BackgroundService {
       // Handle save content request
       this.saveContent(request.data, sendResponse, sender.tab?.id)
       return true // Keep message channel open for async response
+    } else if (request.action === 'openPDFViewer') {
+      // Open a PDF in the dedicated viewer from popup or content scripts
+      const pdfUrl = request.pdfUrl
+      const sourceUrl = request.sourceUrl || request.pdfUrl
+      
+      console.log('📨 Received openPDFViewer request:', {
+        hasPdfUrl: !!pdfUrl,
+        pdfUrlType: typeof pdfUrl,
+        pdfUrlLength: pdfUrl?.length,
+        pdfUrlPreview: pdfUrl ? pdfUrl.substring(0, 100) : 'N/A',
+        sourceUrl: sourceUrl
+      })
+      
+      if (!pdfUrl) {
+        console.warn('⚠️ openPDFViewer request missing pdfUrl')
+        sendResponse({ success: false, error: 'Missing pdfUrl' })
+        return
+      }
+      
+      if (typeof pdfUrl !== 'string' || pdfUrl.trim() === '') {
+        console.warn('⚠️ openPDFViewer request has invalid pdfUrl:', pdfUrl)
+        sendResponse({ success: false, error: 'Invalid pdfUrl: must be a non-empty string' })
+        return
+      }
+
+      ;(async () => {
+        try {
+          await this.openPDFInViewer(pdfUrl, sourceUrl)
+          sendResponse({ success: true })
+        } catch (error: any) {
+          console.error('❌ Failed to open PDF viewer from message:', error)
+          sendResponse({ success: false, error: error?.message || 'Failed to open PDF viewer' })
+        }
+      })()
+      return true
     }
   }
 

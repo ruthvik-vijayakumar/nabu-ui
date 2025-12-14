@@ -1,108 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NabuAI PDF Viewer</title>
-    <link rel="stylesheet" href="pdf-viewer.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../popup/style.css">
 </head>
-<body>
-    <div class="pdf-viewer-container">
-        <div class="header">
-            <div class="header-left">
-                <div class="logo">N</div>
-                <span class="app-name">NabuAI</span>
-                <div class="pdf-info">
-                    <svg class="pdf-icon" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="filename" id="pdf-filename">Loading PDF...</span>
-                </div>
-            </div>
-            <div class="header-right">
-                <button id="open-original" class="btn btn-secondary">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                    </svg>
-                    Open Original
-                </button>
-                <button id="save-to-nabuai" class="btn btn-primary">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
-                    </svg>
-                    Save to NabuAI
-                </button>
-            </div>
-        </div>
-
-        <div class="pdf-viewer">
-            <div id="pdf-container"></div>
-            
-            <div id="loading" class="loading">
-                <div class="spinner"></div>
-                Loading PDF...
-            </div>
-            
-            <div id="error" class="error" style="display: none;">
-                <svg viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                </svg>
-                <h3>Failed to Load PDF</h3>
-                <p>There was an issue displaying the PDF. Please try again or open the original document.</p>
-                <button onclick="window.location.reload()">Reload</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Save Modal -->
-    <div class="save-modal" id="save-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Save PDF to NabuAI</h3>
-                <button class="close-btn" id="close-modal">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-            <div class="modal-body" id="modal-body">
-                <div class="form-group">
-                    <label class="form-label">PDF File</label>
-                    <div class="form-display" id="pdf-file-display"></div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">PDF URL</label>
-                    <div class="form-display" id="pdf-url-display"></div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Source Page</label>
-                    <div class="form-display" id="source-page-display"></div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="pdf-title">Title</label>
-                    <input type="text" id="pdf-title" class="form-input" placeholder="Enter a title for this PDF...">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="pdf-scribe-select">Scribe</label>
-                    <select id="pdf-scribe-select" class="form-input">
-                        <option value="">No scribe</option>
-                        <option value="__new__">➕ Create new scribe</option>
-                    </select>
-                    <p class="form-helper" id="scribe-helper-text">Choose an existing scribe or create a new one.</p>
-                </div>
-                <div class="form-group" id="new-scribe-row" style="display: none;">
-                    <label class="form-label" for="pdf-new-scribe">New scribe name</label>
-                    <input type="text" id="pdf-new-scribe" class="form-input" placeholder="Enter a name for the new scribe...">
-                </div>
-                <div class="modal-actions">
-                    <button class="btn btn-primary" id="save-pdf-btn">Save PDF</button>
-                    <button class="btn btn-secondary" id="cancel-save">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <script type="module" src="pdf-viewer.js"></script>
+<body class="dark bg-background text-foreground">
+    <div id="app"></div>
+    <!-- Load PDF.js before Vue app -->
+    <script src="lib/pdf.min.js"></script>
+    <script type="module" src="./pdf-viewer-vue.ts"></script>
 </body>
 </html>
 

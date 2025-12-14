@@ -3,92 +3,93 @@
     <Transition name="modal">
       <div
         v-if="isOpen"
-        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
         @click.self="handleClose"
       >
-        <div class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl border border-gray-700/60 shadow-2xl w-full max-w-md overflow-hidden">
-          <!-- Header -->
-          <div class="px-6 py-5 border-b border-gray-700/60 bg-gray-900/30 backdrop-blur">
+        <Card class="w-full max-w-md">
+          <CardHeader>
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center shadow-lg">
-                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                  <svg class="w-5 h-5 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                   </svg>
                 </div>
                 <div>
-                  <h2 class="text-lg font-bold text-white">Create New Scribe</h2>
-                  <p class="text-xs text-gray-400">Start a new conversation</p>
+                  <CardTitle>Create New Scribe</CardTitle>
+                  <CardDescription>Start a new conversation</CardDescription>
                 </div>
               </div>
-              <button
+              <Button
+                variant="ghost"
+                size="icon"
                 @click="handleClose"
-                class="p-2 text-gray-400 hover:text-gray-200 hover:bg-gray-800/50 rounded-lg transition"
+                class="h-8 w-8"
               >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
-              </button>
+              </Button>
             </div>
-          </div>
+          </CardHeader>
 
-          <!-- Content -->
-          <div class="p-6 space-y-5">
-            <!-- Name Input -->
-            <div>
-              <label for="scribeName" class="block text-sm font-medium text-gray-300 mb-2">
-                Scribe Name <span class="text-red-400">*</span>
-              </label>
-              <input
-                id="scribeName"
-                v-model="scribeName"
-                type="text"
-                placeholder="e.g., Research Notes, Project Ideas..."
-                class="w-full px-4 py-3 rounded-xl border border-gray-700/60 bg-gray-900/60 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
-                :class="{ 'border-red-500/50 focus:ring-red-500/50': error }"
-                @keyup.enter="handleCreate"
-                autofocus
-              />
-              <p v-if="error" class="mt-2 text-sm text-red-400">{{ error }}</p>
-              <p v-else class="mt-2 text-xs text-gray-500">Give your scribe a descriptive name</p>
-            </div>
+          <CardContent class="space-y-4">
+            <FieldGroup>
+              <Field>
+                <FieldLabel for="scribeName">
+                  Scribe Name <span class="text-destructive">*</span>
+                </FieldLabel>
+                <Input
+                  id="scribeName"
+                  v-model="scribeName"
+                  type="text"
+                  placeholder="e.g., Research Notes, Project Ideas..."
+                  :class="{ 'border-destructive': error }"
+                  @keyup.enter="handleCreate"
+                  autofocus
+                />
+                <FieldDescription v-if="error" class="text-destructive">
+                  {{ error }}
+                </FieldDescription>
+                <FieldDescription v-else>
+                  Give your scribe a descriptive name
+                </FieldDescription>
+              </Field>
 
-            <!-- Optional: Model Selection -->
-            <div>
-              <label for="scribeModel" class="block text-sm font-medium text-gray-300 mb-2">
-                AI Model (Optional)
-              </label>
-              <select
-                id="scribeModel"
-                v-model="selectedModel"
-                class="w-full px-4 py-3 rounded-xl border border-gray-700/60 bg-gray-900/60 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
-              >
-                <option value="gpt-4">GPT-4</option>
-                <option value="gpt-4-turbo">GPT-4 Turbo</option>
-                <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                <option value="claude-3-opus">Claude 3 Opus</option>
-                <option value="claude-3-sonnet">Claude 3 Sonnet</option>
-              </select>
-              <p class="mt-2 text-xs text-gray-500">Choose the AI model for this scribe</p>
-            </div>
-          </div>
+              <Field>
+                <FieldLabel for="scribeModel">AI Model (Optional)</FieldLabel>
+                <select
+                  id="scribeModel"
+                  v-model="selectedModel"
+                  class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <option value="gpt-4">GPT-4</option>
+                  <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                  <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                  <option value="claude-3-opus">Claude 3 Opus</option>
+                  <option value="claude-3-sonnet">Claude 3 Sonnet</option>
+                </select>
+                <FieldDescription>
+                  Choose the AI model for this scribe
+                </FieldDescription>
+              </Field>
+            </FieldGroup>
+          </CardContent>
 
-          <!-- Footer -->
-          <div class="px-6 py-4 border-t border-gray-700/60 bg-gray-900/30 backdrop-blur flex items-center justify-end gap-3">
-            <button
+          <div class="flex items-center justify-end gap-2 border-t border-border px-6 py-4">
+            <Button
+              variant="outline"
               @click="handleClose"
-              class="px-4 py-2 rounded-lg border border-gray-700/60 bg-gray-800/50 text-gray-300 hover:bg-gray-800/70 transition"
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
               @click="handleCreate"
               :disabled="isCreating || !scribeName.trim()"
-              class="px-6 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium hover:from-purple-700 hover:to-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               <svg
                 v-if="isCreating"
-                class="w-4 h-4 animate-spin"
+                class="w-4 h-4 mr-2 animate-spin"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -96,9 +97,9 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
               </svg>
               <span>{{ isCreating ? 'Creating...' : 'Create Scribe' }}</span>
-            </button>
+            </Button>
           </div>
-        </div>
+        </Card>
       </div>
     </Transition>
   </Teleport>
@@ -106,6 +107,10 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Field, FieldLabel, FieldDescription, FieldGroup } from '@/components/ui/field'
 
 const props = defineProps<{
   isOpen: boolean
@@ -203,4 +208,3 @@ async function handleCreate() {
   opacity: 0;
 }
 </style>
-

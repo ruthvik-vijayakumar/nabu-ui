@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NabuAI PDF Viewer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
     <!-- PDF.js from local files -->
     <script src="lib/pdf.min.js"></script>
+    <link rel="stylesheet" href="../popup/style.css">
 </head>
-<body>
+<body class="dark bg-background text-foreground">
     <div id="app"></div>
     <script type="module" src="pdf-viewer-vue.js"></script>
 </body>

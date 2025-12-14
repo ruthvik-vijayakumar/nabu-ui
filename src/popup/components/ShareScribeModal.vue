@@ -3,94 +3,97 @@
     <Transition name="modal">
       <div
         v-if="isOpen"
-        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm"
         @click.self="handleClose"
       >
-        <div class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl border border-gray-700/60 shadow-2xl w-full max-w-md overflow-hidden">
-          <!-- Header -->
-          <div class="px-6 py-5 border-b border-gray-700/60 bg-gray-900/30 backdrop-blur">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg">
-                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
-                  </svg>
-                </div>
-                <div>
-                  <h2 class="text-lg font-bold text-white">Share Scribe</h2>
-                  <p class="text-xs text-gray-400">{{ scribeName }}</p>
-                </div>
-              </div>
-              <button
-                @click="handleClose"
-                class="p-2 text-gray-400 hover:text-gray-200 hover:bg-gray-800/50 rounded-lg transition"
-              >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        <Card class="w-full max-w-md" @click.stop>
+          <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                <svg class="w-5 h-5 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
                 </svg>
-              </button>
+              </div>
+              <div>
+                <CardTitle class="text-lg font-semibold">Share Scribe</CardTitle>
+                <p class="text-xs text-muted-foreground mt-0.5">{{ scribeName }}</p>
+              </div>
             </div>
-          </div>
-
-          <!-- Content -->
-          <div class="p-6 space-y-5">
-            <!-- Email Input -->
+            <Button
+              variant="ghost"
+              size="icon"
+              @click="handleClose"
+              class="h-8 w-8"
+            >
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </Button>
+          </CardHeader>
+          <CardContent class="space-y-4">
             <div>
-              <label for="shareEmail" class="block text-sm font-medium text-gray-300 mb-2">
-                Email Address <span class="text-red-400">*</span>
-              </label>
-              <input
-                id="shareEmail"
-                v-model="email"
-                type="email"
-                placeholder="user@example.com"
-                class="w-full px-4 py-3 rounded-xl border border-gray-700/60 bg-gray-900/60 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 transition-all"
-                :class="{ 'border-red-500/50 focus:ring-red-500/50': error }"
-                @keyup.enter="handleShare"
-                :disabled="isLoading"
-                autofocus
-              />
-              <p v-if="error" class="mt-2 text-sm text-red-400">{{ error }}</p>
-              <p v-else class="mt-2 text-xs text-gray-500">
-                Enter the email address of the person you want to share with
-              </p>
+              <FieldGroup>
+                <Field>
+                  <FieldLabel for="shareEmail" class="text-xs uppercase tracking-wide text-muted-foreground">
+                    Email Address <span class="text-destructive">*</span>
+                  </FieldLabel>
+                  <Input
+                    id="shareEmail"
+                    v-model="email"
+                    type="email"
+                    placeholder="user@example.com"
+                    @keyup.enter="handleShare"
+                    :disabled="isLoading"
+                    autofocus
+                    :class="{ 'border-destructive focus-visible:ring-destructive': error }"
+                  />
+                  <FieldDescription v-if="error" class="text-destructive text-xs">
+                    {{ error }}
+                  </FieldDescription>
+                  <FieldDescription v-else class="text-xs">
+                    Enter the email address of the person you want to share with
+                  </FieldDescription>
+                </Field>
+              </FieldGroup>
             </div>
 
             <!-- Success Message -->
-            <div v-if="success" class="p-4 rounded-xl bg-green-500/10 border border-green-500/30">
-              <div class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div v-if="success" class="p-3 rounded-md bg-muted border border-border">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-foreground flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                 </svg>
-                <p class="text-sm text-green-300">{{ success }}</p>
+                <p class="text-sm text-foreground">{{ success }}</p>
               </div>
             </div>
-          </div>
 
-          <!-- Footer -->
-          <div class="px-6 py-5 border-t border-gray-700/60 bg-gray-900/30 backdrop-blur flex items-center justify-end gap-3">
-            <button
-              @click="handleClose"
-              class="px-4 py-2.5 rounded-xl border border-gray-700/60 bg-gray-800/50 text-gray-300 hover:bg-gray-800/70 hover:text-white transition-all font-medium text-sm"
-              :disabled="isLoading"
-            >
-              Cancel
-            </button>
-            <button
-              @click="handleShare"
-              :disabled="isLoading || !email.trim()"
-              class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 transition-all font-medium text-sm shadow-lg shadow-green-500/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-            >
-              <svg v-if="isLoading" class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-              </svg>
-              <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-              </svg>
-              {{ isLoading ? 'Sharing...' : 'Share' }}
-            </button>
-          </div>
-        </div>
+            <div class="flex gap-2 pt-2">
+              <Button
+                @click="handleShare"
+                :disabled="isLoading || !email.trim()"
+                class="flex-1"
+                size="lg"
+              >
+                <svg v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+                <svg v-else class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                </svg>
+                {{ isLoading ? 'Sharing...' : 'Share' }}
+              </Button>
+              <Button
+                variant="outline"
+                @click="handleClose"
+                :disabled="isLoading"
+                class="flex-1"
+                size="lg"
+              >
+                Cancel
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </Transition>
   </Teleport>
@@ -99,6 +102,10 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { databaseService } from '../../utils/database'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Field, FieldLabel, FieldDescription, FieldGroup } from '@/components/ui/field'
 
 const props = defineProps<{
   isOpen: boolean
@@ -188,4 +195,3 @@ async function handleShare() {
   opacity: 0;
 }
 </style>
-

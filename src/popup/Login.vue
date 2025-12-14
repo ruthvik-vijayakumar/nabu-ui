@@ -1,11 +1,11 @@
 <template>
-  <div :class="cn('flex min-h-screen items-center justify-center p-4 bg-background', className)">
+  <div :class="cn('flex w-full h-full items-center justify-center p-4 bg-background overflow-y-auto', className)">
     <Card class="w-full max-w-md">
       <CardHeader>
       <!-- Logo -->
         <div class="flex justify-center mb-4">
-        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg ring-4 ring-blue-500/20">
-          <span class="text-white font-bold text-2xl">N</span>
+        <div class="w-16 h-16 rounded-xl bg-primary flex items-center justify-center">
+          <span class="text-primary-foreground font-bold text-2xl">N</span>
         </div>
       </div>
 
@@ -23,8 +23,8 @@
       </div>
 
       <!-- Success Message -->
-        <div v-if="successMessage" class="mb-4 bg-emerald-500/10 border border-emerald-500/50 rounded-lg p-3">
-        <p class="text-emerald-400 text-sm">{{ successMessage }}</p>
+        <div v-if="successMessage" class="mb-4 bg-primary/10 border border-primary/20 rounded-lg p-3">
+        <p class="text-primary text-sm">{{ successMessage }}</p>
       </div>
 
         <form @submit.prevent="handleSubmit">

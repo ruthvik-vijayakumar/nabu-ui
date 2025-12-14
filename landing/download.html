@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download Nabu AI - Chrome Extension</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="container">
+        <a href="index.html" class="logo">Nabu AI</a>
+      </div>
+    </header>
+
+    <!-- Download Section -->
+    <section class="download-section">
+      <div class="container">
+        <div class="download-content">
+          <h1 class="download-title">Download Nabu AI</h1>
+          <p class="download-subtitle">Get the Chrome extension and start organizing your web content</p>
+
+          <!-- Download Button -->
+          <div class="download-card">
+            <div class="download-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            </div>
+            <h2 class="card-title">Chrome Extension</h2>
+            <p class="card-description">Download the extension package and follow the installation instructions below.</p>
+            <a href="nabu-ai-plus-extension.zip" download class="btn btn-primary btn-lg" id="downloadBtn" style="margin-top: 16px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Download Extension (ZIP)
+            </a>
+          </div>
+
+          <!-- Installation Instructions -->
+          <div class="instructions-card">
+            <h2 class="card-title">Installation Instructions</h2>
+            <p class="card-description">Follow these steps to load the unpacked Chrome extension:</p>
+
+            <ol class="instructions-list" style="margin-top: 16px;">
+              <li class="instruction-item">
+                <div class="instruction-number">1</div>
+                <div class="instruction-content">
+                  <h3 class="instruction-title">Download the Extension</h3>
+                  <p class="instruction-text">Click the download button above to download the <code>nabu-ai-plus-extension.zip</code> file.</p>
+                </div>
+              </li>
+
+              <li class="instruction-item">
+                <div class="instruction-number">2</div>
+                <div class="instruction-content">
+                  <h3 class="instruction-title">Extract the ZIP File</h3>
+                  <p class="instruction-text">Extract the downloaded ZIP file to a location on your computer. You'll need to remember this location.</p>
+                </div>
+              </li>
+
+              <li class="instruction-item">
+                <div class="instruction-number">3</div>
+                <div class="instruction-content">
+                  <h3 class="instruction-title">Open Chrome Extensions Page</h3>
+                  <p class="instruction-text">Open Google Chrome and navigate to the extensions page by:</p>
+                  <ul class="instruction-sublist">
+                    <li>Typing <code>chrome://extensions/</code> in the address bar, or</li>
+                    <li>Going to <strong>Menu (⋮)</strong> → <strong>Extensions</strong> → <strong>Manage Extensions</strong></li>
+                  </ul>
+                </div>
+              </li>
+
+              <li class="instruction-item">
+                <div class="instruction-number">4</div>
+                <div class="instruction-content">
+                  <h3 class="instruction-title">Enable Developer Mode</h3>
+                  <p class="instruction-text">Toggle the <strong>"Developer mode"</strong> switch in the top-right corner of the extensions page.</p>
+                </div>
+              </li>
+
+              <li class="instruction-item">
+                <div class="instruction-number">5</div>
+                <div class="instruction-content">
+                  <h3 class="instruction-title">Load Unpacked Extension</h3>
+                  <p class="instruction-text">Click the <strong>"Load unpacked"</strong> button that appears after enabling Developer mode.</p>
+                </div>
+              </li>
+
+              <li class="instruction-item">
+                <div class="instruction-number">6</div>
+                <div class="instruction-content">
+                  <h3 class="instruction-title">Select the Extension Folder</h3>
+                  <p class="instruction-text">Navigate to and select the folder where you extracted the extension files (the folder containing <code>manifest.json</code>).</p>
+                </div>
+              </li>
+
+              <li class="instruction-item">
+                <div class="instruction-number">7</div>
+                <div class="instruction-content">
+              <h3 class="instruction-title">Start Using Nabu AI</h3>
+              <p class="instruction-text">The extension should now appear in your extensions list. Click the extension icon in your Chrome toolbar to get started!</p>
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <!-- Visual Guide -->
+          <div class="visual-guide-card">
+            <h2 class="card-title">Quick Visual Guide</h2>
+            <div class="visual-steps">
+              <div class="visual-step">
+                <div class="visual-step-icon">1</div>
+                <p>Enable Developer Mode</p>
+              </div>
+              <div class="visual-arrow">→</div>
+              <div class="visual-step">
+                <div class="visual-step-icon">2</div>
+                <p>Click Load Unpacked</p>
+              </div>
+              <div class="visual-arrow">→</div>
+              <div class="visual-step">
+                <div class="visual-step-icon">3</div>
+                <p>Select Extension Folder</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Troubleshooting -->
+          <div class="troubleshooting-card">
+            <h2 class="card-title">Troubleshooting</h2>
+            <div class="troubleshooting-list">
+              <div class="troubleshooting-item">
+                <h3 class="troubleshooting-question">The extension won't load</h3>
+                <p class="troubleshooting-answer">Make sure you've extracted the ZIP file and are selecting the folder containing <code>manifest.json</code>, not the ZIP file itself.</p>
+              </div>
+              <div class="troubleshooting-item">
+                <h3 class="troubleshooting-question">I see an error message</h3>
+                <p class="troubleshooting-answer">Check the Chrome extensions page for error details. Common issues include missing files or incorrect folder structure.</p>
+              </div>
+              <div class="troubleshooting-item">
+                <h3 class="troubleshooting-question">The extension icon doesn't appear</h3>
+                <p class="troubleshooting-answer">After loading, you may need to pin the extension to your toolbar. Click the puzzle icon in Chrome's toolbar and pin Nabu AI Plus.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Back to Home -->
+          <div class="back-link">
+            <a href="index.html" class="btn btn-outline" style="padding: 10px 16px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5"></path>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              Back to Home
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <p class="footer-text">© 2025 Nabu AI. All rights reserved.</p>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
+

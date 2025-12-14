@@ -1,111 +1,187 @@
 <template>
   <div class="dark min-h-screen bg-background text-foreground">
-    <div class="relative overflow-hidden border-b border-border bg-card">
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div class="flex items-start gap-4">
-            <Button 
-              variant="ghost" 
-              size="icon"
-              @click="$emit('back')" 
-              class="h-10 w-10"
+    <!-- Dashboard Header -->
+    <header class="sticky top-0 z-50 w-full  bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div class="border-b">
+      <div class="container flex h-16 items-center px-4 sm:px-6 lg:px-8 ">
+        <div class="flex flex-1 items-center gap-4">
+          <!-- Back Button -->
+          <Button 
+            variant="ghost" 
+            size="icon"
+            @click="$emit('back')" 
+            class="h-9 w-9"
+          >
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+          </Button>
+          
+          <!-- Scribe Name -->
+          <div v-if="!scribeName" class="h-6 w-32 bg-muted rounded animate-pulse"></div>
+          <h1 v-else class="text-xl font-bold text-foreground">
+            {{ scribeName }}
+          </h1>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-2">
+          <Button 
+            variant="ghost"
+            @click="refreshDocuments"
+            :disabled="isLoadingDocuments"
+            class="h-9 px-3"
+          >
+            <svg 
+              class="h-4 w-4 mr-2 transition-transform"
+              :class="{ 'animate-spin': isLoadingDocuments }"
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
             >
-              <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+            Refresh
+          </Button>
+        </div>
+      </div>
+      </div>
+      <!-- Sub-header with metadata -->
+      <div class="bg-muted/20 border-b">
+        <div class="container px-4 sm:px-6 lg:px-8 py-3">
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+            <div class="flex items-center gap-1.5">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
               </svg>
-            </Button>
-            <div>
-              <p class="text-xs font-semibold uppercase text-muted-foreground">Scribe workspace</p>
-              <h1 class="mt-3 text-3xl sm:text-4xl font-semibold text-foreground">{{ scribeName || 'Scribe' }}</h1>
-              <p class="mt-3 text-sm text-muted-foreground flex flex-wrap items-center gap-2">
-                <span>{{ documentStats.total }} saved item{{ documentStats.total === 1 ? '' : 's' }}</span>
-                <span v-if="documentStats.lastSaved !== '—'" class="text-muted-foreground/50">•</span>
-                <span v-if="documentStats.lastSaved !== '—'">Updated {{ documentStats.lastSaved }}</span>
-                <span class="text-muted-foreground/50">•</span>
-                <span>Model: {{ scribeDetails?.model || 'Default' }}</span>
-              </p>
+              <span>{{ documentStats.total }} saved item{{ documentStats.total === 1 ? '' : 's' }}</span>
             </div>
-          </div>
-          <div class="flex flex-wrap items-center gap-2">
-            <Button 
-              variant="outline"
-              @click="refreshDocuments"
-              :disabled="isLoadingDocuments"
-              title="Refresh"
-            >
-              <svg 
-                class="w-4.5 h-4.5 mr-2 transition-transform"
-                :class="{ 'animate-spin': isLoadingDocuments }"
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            <span v-if="documentStats.lastSaved !== '—'" class="flex items-center gap-1.5">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
-              Refresh
-            </Button>
+              <span>Updated {{ documentStats.lastSaved }}</span>
+            </span>
+            <span class="flex items-center gap-1.5">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+              </svg>
+              <span>Model: {{ scribeDetails?.model || 'Default' }}</span>
+            </span>
           </div>
         </div>
       </div>
-    </div>
+    </header>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div class="grid grid-cols-12 gap-6">
-        <!-- Left: Saved Items / Add Files -->
+    <div class="container px-4 sm:px-6 lg:px-8 h-full">
+      <div class="grid grid-cols-12">
+        <!-- Left: Saved Items with Drag & Drop Widget -->
         <div 
-          class="col-span-12 lg:col-span-4 flex flex-col relative" 
-          style="height: calc(100vh - 200px); min-height: 600px;"
+          class="col-span-12 border-l lg:col-span-4 flex flex-col relative border-r border-border px-4 py-2" 
+          style="height: calc(100vh - 120px); min-height: 600px;"
         >
-          <!-- Tab Navigation -->
-          <div class="flex-shrink-0 flex items-center gap-2 mb-6 border-b border-border">
-            <button
-              @click="activeTab = 'saved'"
-              :class="[
-                'px-4 py-2 text-sm font-medium transition-colors border-b-2 -mb-px',
-                activeTab === 'saved'
-                  ? 'border-primary text-foreground'
-                  : 'border-transparent text-muted-foreground hover:text-foreground'
-              ]"
+          <!-- Drag & Drop Widget -->
+          <div 
+            class="flex-shrink-0 mb-4 relative"
+            @drop.prevent="handleDrop"
+            @dragover.prevent="isDragging = true"
+            @dragleave.prevent="isDragging = false"
+            @dragenter.prevent="isDragging = true"
+          >
+            <!-- Hidden file input -->
+            <input
+              ref="fileInputRef"
+              type="file"
+              multiple
+              accept="image/*,.pdf,.txt,.md"
+              @change="handleFileSelect"
+              class="hidden"
+            />
+
+            <Card 
+              class="border-dashed transition-colors"
+              :class="isDragging 
+                ? 'border-primary bg-primary/10 border-2' 
+                : 'border-border/50 hover:border-primary/50'"
             >
-              Saved Items
-              <span class="ml-2 text-xs text-muted-foreground">({{ documents.length }})</span>
-            </button>
-            <button
-              @click="activeTab = 'add'"
-              :class="[
-                'px-4 py-2 text-sm font-medium transition-colors border-b-2 -mb-px',
-                activeTab === 'add'
-                  ? 'border-primary text-foreground'
-                  : 'border-transparent text-muted-foreground hover:text-foreground'
-              ]"
-            >
-              Add Files
-            </button>
+              <CardContent class="p-4">
+                <div class="flex items-center gap-3">
+                  <div class="flex-shrink-0">
+                    <svg 
+                      class="w-5 h-5 text-muted-foreground" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path 
+                        stroke-linecap="round" 
+                        stroke-linejoin="round" 
+                        stroke-width="2" 
+                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                      />
+                    </svg>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-foreground">
+                      {{ isDragging ? 'Drop files here' : 'Drag & drop files or' }}
+                    </p>
+                    <p v-if="!isDragging" class="text-xs text-muted-foreground mt-0.5">
+                      Images, PDFs, text files, or links
+                    </p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    @click="triggerFileInput"
+                    :disabled="isUploading"
+                    class="flex-shrink-0"
+                  >
+                    <svg v-if="!isUploading" class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    <svg v-else class="w-4 h-4 mr-1 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                    {{ isUploading ? 'Uploading...' : 'Select' }}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
-          <!-- Saved Items Tab -->
-          <div v-if="activeTab === 'saved'" class="flex-1 overflow-y-auto custom-scroll">
+          <!-- Saved Items List -->
+          <div class="flex-1 overflow-y-auto custom-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           
           <!-- Loading State -->
-          <div v-if="isLoadingDocuments" class="flex-1 space-y-4 overflow-y-auto custom-scroll">
+          <div v-if="isLoadingDocuments" class="flex-1 space-y-3 overflow-y-auto custom-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             <Card v-for="n in 3" :key="n" class="animate-pulse border-border/50">
-              <CardContent class="p-0">
-                <div class="w-full h-32 bg-muted"></div>
-                <div class="p-4 space-y-3">
-                  <div class="flex items-start gap-3">
-                    <div class="w-10 h-10 bg-muted rounded-lg"></div>
-                    <div class="flex-1 space-y-2">
-                      <div class="h-4 bg-muted rounded w-3/4"></div>
-                      <div class="h-3 bg-muted rounded w-1/2"></div>
+              <CardContent class="p-4">
+                <div class="flex items-start gap-3">
+                  <!-- Image Preview Skeleton -->
+                  <div class="w-16 h-16 flex-shrink-0 bg-muted rounded-lg"></div>
+                  
+                  <!-- Content Skeleton -->
+                  <div class="flex-1 min-w-0 space-y-2">
+                    <!-- Title -->
+                    <div class="h-4 bg-muted rounded w-3/4"></div>
+                    <!-- URL/Preview -->
+                    <div class="h-3 bg-muted rounded w-1/2"></div>
+                    <!-- Metadata -->
+                    <div class="flex items-center gap-2 pt-1">
+                      <div class="h-3 bg-muted rounded w-16"></div>
+                      <div class="h-3 bg-muted rounded w-12"></div>
                     </div>
                   </div>
+                  
+                  <!-- Action Menu Skeleton -->
+                  <div class="w-8 h-8 flex-shrink-0 bg-muted rounded"></div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
           <!-- Documents List -->
-          <div v-else-if="documents.length > 0" class="flex-1 overflow-y-auto custom-scroll space-y-3">
+          <div v-else-if="documents.length > 0" class="flex-1 overflow-y-auto custom-scroll space-y-3 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             <Card
               v-for="doc in documents"
               :key="doc.id"
@@ -114,7 +190,7 @@
                 ? 'ring-2 ring-primary/50 bg-primary/5 border-primary/30' 
                 : 'hover:border-primary/30 hover:bg-accent/30 border-border/50'"
             >
-              <CardContent class="p-4">
+              <CardContent class="p-4 cursor-pointer" @click="openSavedItem(doc)">
                 <div class="flex items-start gap-3">
                   <!-- Image Preview (1:1 square on the left) -->
                   <div 
@@ -166,7 +242,7 @@
                         {{ timeAgo(doc.updated_at || doc.created_at) }}
                       </span>
                       <span>•</span>
-                      <span class="uppercase text-[10px] font-medium">{{ doc.type }}</span>
+                      <span class="uppercase text-xs font-medium">{{ doc.type }}</span>
                     </div>
 
                     <!-- Tags -->
@@ -174,13 +250,13 @@
                       <span 
                         v-for="tag in doc.tags.slice(0, 3)" 
                         :key="tag" 
-                        class="inline-flex items-center px-2 py-0.5 text-[10px] rounded-md bg-muted/60 text-foreground/80 font-medium"
+                        class="inline-flex items-center px-2 py-0.5 text-xs rounded-md bg-muted/60 text-foreground/80 font-medium"
                       >
                         {{ tag }}
                       </span>
                       <span 
                         v-if="doc.tags.length > 3"
-                        class="inline-flex items-center px-2 py-0.5 text-[10px] rounded-md bg-muted/40 text-muted-foreground"
+                        class="inline-flex items-center px-2 py-0.5 text-xs rounded-md bg-muted/40 text-muted-foreground"
                       >
                         +{{ doc.tags.length - 3 }}
                       </span>
@@ -188,30 +264,62 @@
                   </div>
 
                   <!-- Action Buttons -->
-                  <div class="flex flex-col gap-2 flex-shrink-0">
+                  <div class="flex items-center gap-1 flex-shrink-0">
+                    <!-- Add to Editor Button (for text, image, screenshot only) -->
                     <Button
-                      v-if="doc.url"
+                      v-if="doc.type === 'text' || doc.type === 'image' || doc.type === 'screenshot'"
                       variant="ghost"
                       size="icon"
-                      @click.stop="openDocumentLink(doc)"
+                      @click.stop="addToEditor(doc)"
                       class="h-8 w-8"
-                      title="Open Link"
+                      title="Add to Editor"
                     >
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                       </svg>
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      @click.stop="deleteDocument(doc)"
-                      class="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
-                      title="Delete"
+
+                    <!-- Action Menu -->
+                    <div class="relative" data-doc-menu :data-doc-id="doc.id">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        @click.stop="openDocMenu(doc.id)"
+                        class="h-8 w-8"
+                      >
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                        </svg>
+                      </Button>
+                    <Card
+                      v-if="docMenuOpen === doc.id"
+                      class="absolute right-0 top-10 z-50 w-48 p-1"
                     >
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                      </svg>
-                    </Button>
+                      <CardContent class="p-0">
+                        <Button
+                          v-if="doc.url"
+                          variant="ghost"
+                          @click.stop="openDocumentLink(doc); docMenuOpen = null"
+                          class="w-full justify-start text-sm py-1 px-3 h-8"
+                        >
+                          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                          </svg>
+                          Open Link
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          @click.stop="deleteDocument(doc); docMenuOpen = null"
+                          class="w-full justify-start text-sm text-destructive py-1 px-3 h-8"
+                        >
+                          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                          </svg>
+                          Delete
+                        </Button>
+                      </CardContent>
+                    </Card>
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -231,114 +339,197 @@
             </CardContent>
           </Card>
           </div>
-
-          <!-- Add Files Tab -->
-          <div 
-            v-else
-            class="flex-1 flex flex-col relative"
-            @drop.prevent="handleDrop"
-            @dragover.prevent="isDragging = true"
-            @dragleave.prevent="isDragging = false"
-            @dragenter.prevent="isDragging = true"
-          >
-            <!-- Hidden file input -->
-            <input
-              ref="fileInputRef"
-              type="file"
-              multiple
-              accept="image/*,.pdf,.txt,.md"
-              @change="handleFileSelect"
-              class="hidden"
-            />
-
-            <!-- Drop Zone -->
-            <Card class="flex-1 flex items-center justify-center border-dashed border-2 border-border/50 hover:border-primary/50 transition-colors">
-              <CardContent class="w-full p-8">
-                <div
-                  v-if="!isDragging"
-                  class="text-center space-y-6"
-                >
-                  <div class="w-20 h-20 rounded-full bg-muted/50 flex items-center justify-center mx-auto">
-                    <svg class="w-10 h-10 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 class="text-lg font-semibold text-foreground mb-2">Drop files here</h3>
-                    <p class="text-sm text-muted-foreground mb-6">
-                      Drag and drop images, PDFs, text files, or links
-                    </p>
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      @click="triggerFileInput"
-                      :disabled="isUploading"
-                    >
-                      <svg v-if="!isUploading" class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                      </svg>
-                      <svg v-else class="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                      </svg>
-                      {{ isUploading ? 'Uploading...' : 'Select Files' }}
-                    </Button>
-                  </div>
-                  <div class="text-xs text-muted-foreground space-y-1">
-                    <p>Supported formats:</p>
-                    <p class="font-medium">Images (JPG, PNG, GIF), PDFs, Text files (.txt, .md)</p>
-                    <p class="font-medium">Or paste URLs and text directly</p>
-                  </div>
-                </div>
-
-                <!-- Active Drop Zone -->
-                <div
-                  v-else
-                  class="absolute inset-0 flex items-center justify-center bg-primary/10 border-2 border-dashed border-primary rounded-lg backdrop-blur-sm z-10"
-                  @drop.prevent="handleDrop"
-                  @dragover.prevent
-                  @dragleave.prevent="isDragging = false"
-                >
-                  <div class="text-center p-8">
-                    <svg class="w-20 h-20 text-primary mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-                    </svg>
-                    <p class="text-xl font-semibold text-foreground mb-2">Drop files here</p>
-                    <p class="text-sm text-muted-foreground">Images, PDFs, text files, or links</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
         </div>
 
-        <!-- Center: Chat Area -->
-        <div class="col-span-12 lg:col-span-8 flex flex-col" style="height: calc(100vh - 200px); min-height: 600px;">
-          <!-- Messages Area -->
-          <div ref="messagesAreaRef" class="flex-1 overflow-y-auto px-4 py-6 custom-scroll">
-              <!-- Welcome Message -->
-              <div v-if="messages.length === 0 && !isLoading" class="flex items-start gap-4 py-6 max-w-3xl mx-auto">
-                <div class="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-                  <svg class="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
-                  </svg>
-                </div>
-                <div class="flex-1">
-                  <div class="markdown-content text-foreground">
-                    <p class="text-sm leading-relaxed mb-2">
-                      Hello! I'm your AI assistant for this scribe. I can help you understand and analyze the {{ documents.length }} document{{ documents.length !== 1 ? 's' : '' }} you've saved here.
-                    </p>
-                    <p class="text-xs text-muted-foreground">
-                      Ask me anything about your documents, or request summaries, insights, or comparisons.
-                    </p>
+        <!-- Center: Chat Area with Tabs -->
+        <div class="col-span-12 lg:col-span-8 flex flex-col border-r border-border" style="height: calc(100vh - 120px); min-height: 600px;">
+          <!-- Tab Navigation -->
+          <div class="flex-shrink-0 border-b border-border bg-background">
+            <div class="flex items-center gap-2 px-4">
+              <button
+                @click="chatActiveTab = 'chat'"
+                :class="[
+                  'flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors border-b-2 -mb-px',
+                  chatActiveTab === 'chat'
+                    ? 'border-primary text-foreground'
+                    : 'border-transparent text-muted-foreground hover:text-foreground'
+                ]"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                </svg>
+                Chat
+              </button>
+              <button
+                @click="chatActiveTab = 'edra'"
+                :class="[
+                  'flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors border-b-2 -mb-px',
+                  chatActiveTab === 'edra'
+                    ? 'border-primary text-foreground'
+                    : 'border-transparent text-muted-foreground hover:text-foreground'
+                ]"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                </svg>
+                Editor
+              </button>
+            </div>
+          </div>
+
+          <!-- Chat Tab Content -->
+          <div v-if="chatActiveTab === 'chat'" class="flex-1 flex flex-col min-h-0 overflow-hidden">
+            <!-- Loading Chat History Skeleton -->
+            <div v-if="messages.length === 0 && isLoadingHistory" class="flex-1 overflow-y-auto px-4 py-4 custom-scroll">
+              <div class="w-full max-w-3xl mx-auto space-y-3">
+                <div v-for="n in 3" :key="n" class="flex items-start gap-4 py-3">
+                  <div class="w-8 h-8 rounded-full bg-muted animate-pulse flex-shrink-0"></div>
+                  <div class="flex-1 min-w-0 space-y-2">
+                    <div class="h-4 bg-muted rounded animate-pulse" :style="`width: ${85 - n * 5}%;`"></div>
+                    <div class="h-4 bg-muted rounded animate-pulse" :style="`width: ${70 - n * 5}%;`"></div>
+                    <div v-if="n < 3" class="h-4 bg-muted rounded animate-pulse" :style="`width: ${60 - n * 5}%;`"></div>
                   </div>
                 </div>
               </div>
+            </div>
+
+            <!-- Empty State: Centered Input with Action Buttons -->
+            <div v-else-if="messages.length === 0 && !isLoading && !isLoadingHistory" class="flex-1 flex flex-col items-center justify-center px-4 py-8">
+              <div class="w-full max-w-2xl space-y-6">
+                <!-- Title -->
+                <div class="text-center space-y-2">
+                  <h2 class="text-2xl font-bold text-foreground">Ask anything</h2>
+                  <p class="text-sm text-muted-foreground">
+                    I can help you understand and analyze the {{ documents.length }} document{{ documents.length !== 1 ? 's' : '' }} you've saved here.
+                  </p>
+                </div>
+
+                <!-- Large Input Field -->
+                <div class="relative">
+                  <form @submit.prevent="sendMessage" class="w-full">
+                    <div class="relative">
+                      <Textarea
+                        v-model="message"
+                        @keydown.enter.exact.prevent="sendMessage"
+                        @keydown.enter.shift.exact="message += '\n'"
+                        rows="3"
+                        placeholder="Ask anything"
+                        class="w-full pr-12 resize-none transition-all bg-background border-2 border-border rounded-lg text-base"
+                        :disabled="isLoading"
+                        @input="autoResize"
+                        ref="messageInput"
+                      />
+                      <Button
+                        type="submit"
+                        size="icon"
+                        @click="sendMessage"
+                        :disabled="isLoading || !message.trim()"
+                        class="absolute right-2 bottom-2 h-9 w-9 bg-foreground text-background hover:bg-foreground/90"
+                      >
+                        <svg 
+                          v-if="!isLoading"
+                          class="w-4 h-4" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                        </svg>
+                        <svg 
+                          v-else
+                          class="w-4 h-4 animate-spin" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                      </Button>
+                    </div>
+                  </form>
+                </div>
+
+                <!-- Research Action Buttons -->
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                  <Button
+                    variant="outline"
+                    @click="message = 'Summarize the key findings and main arguments from all saved documents'; sendMessage()"
+                    class="h-10 px-4 bg-muted/50 hover:bg-muted"
+                  >
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Summarize Documents
+                  </Button>
+                  <Button
+                    variant="outline"
+                    @click="message = 'Extract and list all key findings, statistics, and data points from the saved documents'; sendMessage()"
+                    class="h-10 px-4 bg-muted/50 hover:bg-muted"
+                  >
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                    </svg>
+                    Extract Key Findings
+                  </Button>
+                  <Button
+                    variant="outline"
+                    @click="message = 'Compare and contrast the different perspectives, methodologies, or findings across the saved documents'; sendMessage()"
+                    class="h-10 px-4 bg-muted/50 hover:bg-muted"
+                  >
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    Compare Documents
+                  </Button>
+                  <Button
+                    variant="outline"
+                    @click="message = 'Generate a literature review outline based on the themes and topics in the saved documents'; sendMessage()"
+                    class="h-10 px-4 bg-muted/50 hover:bg-muted"
+                  >
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Literature Review
+                  </Button>
+                  <Button
+                    variant="outline"
+                    @click="message = 'Analyze the research methodologies used in the saved documents and identify their strengths and limitations'; sendMessage()"
+                    class="h-10 px-4 bg-muted/50 hover:bg-muted"
+                  >
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    Analyze Methodology
+                  </Button>
+                  <Button
+                    variant="outline"
+                    @click="message = 'Generate research questions based on the gaps, themes, and findings in the saved documents'; sendMessage()"
+                    class="h-10 px-4 bg-muted/50 hover:bg-muted"
+                  >
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Research Questions
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Messages View: When there are messages -->
+            <template v-else>
+              <!-- Messages Area -->
+              <div 
+                ref="messagesAreaRef" 
+                class="flex-1 overflow-y-auto px-4 py-4 custom-scroll"
+                @contextmenu.prevent="handleBlockContextMenu($event)"
+              >
 
               <!-- Messages -->
               <div 
                 v-for="(msg, idx) in messages" 
                 :key="idx"
-                class="flex items-start gap-4 py-6 group bg-background"
+                class="flex items-start gap-4 py-3 group bg-background"
+                :data-message-index="idx"
               >
                 <div class="w-full max-w-3xl mx-auto flex items-start gap-4">
                   <div 
@@ -378,18 +569,14 @@
                 </div>
               </div>
 
-              <!-- Loading Indicator -->
-              <div v-if="isLoading" class="flex items-start gap-4 py-6 bg-background">
+              <!-- Loading Skeleton -->
+              <div v-if="isLoading" class="flex items-start gap-4 py-3 bg-background">
                 <div class="w-full max-w-3xl mx-auto flex items-start gap-4">
-                  <div class="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 text-muted-foreground animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                    </svg>
-                  </div>
-                  <div class="flex-1">
-                    <div class="flex items-center gap-2 text-sm text-muted-foreground">
-                      <span class="animate-pulse">Thinking...</span>
-                    </div>
+                  <div class="w-8 h-8 rounded-full bg-muted animate-pulse flex-shrink-0"></div>
+                  <div class="flex-1 min-w-0 space-y-2">
+                    <div class="h-4 bg-muted rounded animate-pulse" style="width: 85%;"></div>
+                    <div class="h-4 bg-muted rounded animate-pulse" style="width: 70%;"></div>
+                    <div class="h-4 bg-muted rounded animate-pulse" style="width: 60%;"></div>
                   </div>
                 </div>
               </div>
@@ -407,54 +594,170 @@
                   </div>
                 </div>
               </div>
-            </div>
+              </div>
 
-          <!-- Input Area -->
-          <div class="px-4 py-4 border-t border-border/50 bg-background">
-            <div class="max-w-3xl mx-auto">
-              <form @submit.prevent="sendMessage" class="flex items-end gap-3">
-                <div class="flex-1 relative">
-                  <Textarea
-                    v-model="message"
-                    @keydown.enter.exact.prevent="sendMessage"
-                    @keydown.enter.shift.exact="message += '\n'"
-                    rows="1"
-                    placeholder="Message Nabu AI..."
-                    class="w-full pr-12 resize-none transition-all bg-muted/50 border-border"
-                    :disabled="isLoading"
-                    style="min-height: 48px; max-height: 120px;"
-                    @input="autoResize"
-                    ref="messageInput"
-                  />
-                  <Button
-                    type="button"
-                    size="icon"
-                    @click="sendMessage"
-                    :disabled="isLoading || !message.trim()"
-                    class="absolute right-2 bottom-2 h-8 w-8"
-                  >
-                    <svg 
-                      v-if="!isLoading"
-                      class="w-4 h-4" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
+              <!-- Block Context Menu -->
+              <div
+                v-if="blockContextMenu.open"
+                class="fixed z-[100] block-context-menu"
+                :style="{ left: blockContextMenu.x + 'px', top: blockContextMenu.y + 'px' }"
+                data-block-context-menu
+                @click.stop
+              >
+                <Card class="w-48 p-1">
+                  <CardContent class="p-0">
+                    <Button
+                      variant="ghost"
+                      @click="addBlockToEditor"
+                      class="w-full justify-start text-sm py-1 px-3 h-8"
                     >
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-                    </svg>
-                    <svg 
-                      v-else
-                      class="w-4 h-4 animate-spin" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
+                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                      </svg>
+                      Add to Editor
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      @click="copyBlockContent"
+                      class="w-full justify-start text-sm py-1 px-3 h-8"
                     >
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                    </svg>
-                  </Button>
+                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                      </svg>
+                      Copy
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <!-- Input Area with Shortcuts -->
+              <div class="px-4 py-4 border-t border-border/50 bg-background flex-shrink-0">
+                <div class="w-full max-w-3xl mx-auto">
+                  <form @submit.prevent="sendMessage" class="flex items-end gap-3 mb-3">
+                    <div class="flex-1 relative">
+                      <Textarea
+                        v-model="message"
+                        @keydown.enter.exact.prevent="sendMessage"
+                        @keydown.enter.shift.exact="message += '\n'"
+                        rows="1"
+                        placeholder="Message Nabu AI..."
+                        class="w-full pr-12 resize-none transition-all bg-muted/50 border-border"
+                        :disabled="isLoading"
+                        style="min-height: 48px; max-height: 120px;"
+                        @input="autoResize"
+                        ref="messageInput"
+                      />
+                      <Button
+                        type="button"
+                        size="icon"
+                        @click="sendMessage"
+                        :disabled="isLoading || !message.trim()"
+                        class="absolute right-2 bottom-2 h-8 w-8"
+                      >
+                        <svg 
+                          v-if="!isLoading"
+                          class="w-4 h-4" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                        </svg>
+                        <svg 
+                          v-else
+                          class="w-4 h-4 animate-spin" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                      </Button>
+                    </div>
+                  </form>
+                  
+                  <!-- Research Action Buttons -->
+                  <div class="flex flex-wrap items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      @click="message = 'Summarize the key findings and main arguments from all saved documents'; sendMessage()"
+                      class="h-7 px-3 text-xs"
+                    >
+                      <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                      </svg>
+                      Summarize
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      @click="message = 'Extract and list all key findings, statistics, and data points from the saved documents'; sendMessage()"
+                      class="h-7 px-3 text-xs"
+                    >
+                      <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                      </svg>
+                      Extract Findings
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      @click="message = 'Compare and contrast the different perspectives, methodologies, or findings across the saved documents'; sendMessage()"
+                      class="h-7 px-3 text-xs"
+                    >
+                      <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                      </svg>
+                      Compare
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      @click="message = 'Generate a literature review outline based on the themes and topics in the saved documents'; sendMessage()"
+                      class="h-7 px-3 text-xs"
+                    >
+                      <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                      </svg>
+                      Literature Review
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      @click="message = 'Analyze the research methodologies used in the saved documents and identify their strengths and limitations'; sendMessage()"
+                      class="h-7 px-3 text-xs"
+                    >
+                      <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                      </svg>
+                      Methodology
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      @click="message = 'Generate research questions based on the gaps, themes, and findings in the saved documents'; sendMessage()"
+                      class="h-7 px-3 text-xs"
+                    >
+                      <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      Research Questions
+                    </Button>
+                  </div>
                 </div>
-              </form>
-            </div>
+              </div>
+            </template>
+          </div>
+
+          <!-- Edra Editor Tab Content -->
+          <div v-else-if="chatActiveTab === 'edra'" class="flex-1 flex flex-col min-h-0 overflow-hidden p-4">
+            <EdraEditor
+              ref="edraEditorRef"
+              v-model="edraContent"
+              placeholder="Start writing your notes..."
+              class="h-full"
+            />
           </div>
         </div>
       </div>
@@ -532,7 +835,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick, computed, watch } from 'vue'
+import { ref, onMounted, onBeforeUnmount, nextTick, computed, watch } from 'vue'
 import { databaseService } from '../utils/database'
 import { edgeFunctionService } from '../utils/edgeFunctions'
 import { supabase } from '../utils/supabase'
@@ -541,6 +844,7 @@ import { StorageManager } from '../utils/storage'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
+import EdraEditor from '@/components/EdraEditor.vue'
 
 const props = defineProps<{ scribeId: string }>()
 const emit = defineEmits<{ (e: 'back'): void }>()
@@ -554,7 +858,19 @@ const messagesAreaRef = ref<HTMLElement | null>(null)
 const isDragging = ref(false)
 const fileInputRef = ref<HTMLInputElement | null>(null)
 const isUploading = ref(false)
-const activeTab = ref<'saved' | 'add'>('saved')
+const chatActiveTab = ref<'chat' | 'edra'>('chat')
+const edraContent = ref('')
+const edraEditorRef = ref<InstanceType<typeof EdraEditor> | null>(null)
+const docMenuOpen = ref<string | null>(null)
+const isSavingEditor = ref(false)
+let saveEditorTimeout: ReturnType<typeof setTimeout> | null = null
+const blockContextMenu = ref<{ open: boolean; x: number; y: number; content: string; messageIndex: number }>({
+  open: false,
+  x: 0,
+  y: 0,
+  content: '',
+  messageIndex: -1
+})
 const messages = ref<Array<{
   role: 'user' | 'assistant'
   content: string
@@ -567,8 +883,8 @@ const messages = ref<Array<{
   }>
 }>>([])
 const isLoading = ref(false)
-const isLoadingDocuments = ref(false)
-const isLoadingHistory = ref(false)
+const isLoadingDocuments = ref(true)
+const isLoadingHistory = ref(true)
 const error = ref<string | null>(null)
 const response = ref<any>(null)
 const selectedDoc = ref<any>(null)
@@ -873,9 +1189,8 @@ async function processFiles(files: File[]) {
       }
     }
 
-    // Refresh documents list and switch to saved items tab
+    // Refresh documents list
     await loadDocuments()
-    activeTab.value = 'saved'
     
     // Note: Vectorization is automatically triggered by storageManager.saveContent()
     // Images -> processImage() edge function
@@ -907,7 +1222,6 @@ async function processUrl(url: string) {
     } as any)
 
     await loadDocuments()
-    activeTab.value = 'saved'
   } catch (error: any) {
     console.error('Error processing URL:', error)
     error.value = `Failed to save URL: ${error.message || 'Unknown error'}`
@@ -933,7 +1247,6 @@ async function processText(text: string) {
     } as any)
 
     await loadDocuments()
-    activeTab.value = 'saved'
   } catch (error: any) {
     console.error('Error processing text:', error)
     error.value = `Failed to save text: ${error.message || 'Unknown error'}`
@@ -943,10 +1256,23 @@ async function processText(text: string) {
 }
 
 onMounted(async () => {
+  document.addEventListener('click', handleClickOutside)
+  document.addEventListener('contextmenu', handleClickOutside)
   const s = await databaseService.getScribeById(props.scribeId)
   scribeName.value = s?.name || 'Scribe'
   scribeDetails.value = s || null
+  
+  // Load editor content if it exists
+  if (s && (s as any).editor_content) {
+    edraContent.value = (s as any).editor_content
+  }
+  
   await Promise.all([loadDocuments(), loadChatHistory()])
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+  document.removeEventListener('contextmenu', handleClickOutside)
 })
 
 function truncateUrl(url: string): string {
@@ -1139,6 +1465,533 @@ function handleImageError(event: Event) {
     `
   }
 }
+
+function openDocMenu(docId: string) {
+  docMenuOpen.value = docMenuOpen.value === docId ? null : docId
+}
+
+async function getPdfUrlFromDoc(doc: any): Promise<string | null> {
+  console.log('🔍 Getting PDF URL from doc:', {
+    id: doc.id,
+    type: doc.type,
+    hasMetadata: !!doc.metadata,
+    metadata: doc.metadata,
+    metadataPdfUrl: doc.metadata?.pdfUrl,
+    mediaUrl: doc.media_url,
+    mediaType: doc.media_type,
+    url: doc.url,
+    storagePath: doc.storage_object_path,
+    contentPreview: typeof doc.content === 'string' ? doc.content.substring(0, 100) : typeof doc.content
+  })
+
+  // Parse metadata if it's a string (JSON)
+  let metadata = doc.metadata
+  if (typeof metadata === 'string') {
+    try {
+      metadata = JSON.parse(metadata)
+    } catch (e) {
+      console.warn('⚠️ Failed to parse metadata as JSON:', e)
+    }
+  }
+
+  // Prefer explicit PDF URL from metadata if present
+  if (metadata && typeof metadata.pdfUrl === 'string' && metadata.pdfUrl) {
+    console.log('✅ Using PDF URL from metadata:', metadata.pdfUrl)
+    return metadata.pdfUrl
+  }
+
+  const isPdfSelection = Array.isArray(doc.tags) && doc.tags.includes('pdf-selection')
+  const isPdfDoc = doc.type === 'pdf' || isPdfSelection || doc.media_type === 'application/pdf'
+
+  // Helper function to check if a string looks like a storage path
+  const isStoragePath = (path: string): boolean => {
+    if (!path || typeof path !== 'string') return false
+    return (
+      path.includes('nabu-ai-object-storage') ||
+      path.includes('/storage/v1/object/') ||
+      (!path.startsWith('http://') && !path.startsWith('https://') && !path.startsWith('data:') && !path.startsWith('blob:') && path.length > 0 && path.includes('/'))
+    )
+  }
+
+  // Helper function to extract storage path from media_url or storage_object_path
+  const extractStoragePath = (path: string): string => {
+    // Remove bucket name prefix if present
+    let cleaned = path.replace(/^nabu-ai-object-storage\//, '').replace(/^\//, '')
+    // Remove storage API path prefix if present
+    cleaned = cleaned.replace(/^storage\/v1\/object\/[^/]+\//, '')
+    return cleaned
+  }
+
+  // Helper function to get signed URL from storage path
+  const getSignedUrlFromPath = async (storagePath: string): Promise<string | null> => {
+    try {
+      const cleanedPath = extractStoragePath(storagePath)
+      console.log('🔍 Attempting to get signed URL for path:', cleanedPath)
+      
+      const { data: signedData, error: signedError } = await supabase.storage
+        .from('nabu-ai-object-storage')
+        .createSignedUrl(cleanedPath, 3600)
+      
+      if (!signedError && signedData?.signedUrl) {
+        console.log('✅ Using signed URL from storage path:', signedData.signedUrl)
+        return signedData.signedUrl
+      }
+      
+      // Fallback to public URL if signed URL fails
+      if (signedError) {
+        console.warn('⚠️ Failed to get signed URL, trying public URL:', signedError)
+        const { data: pubData } = supabase.storage.from('nabu-ai-object-storage').getPublicUrl(cleanedPath)
+        if (pubData?.publicUrl) {
+          console.log('✅ Using public URL from storage:', pubData.publicUrl)
+          return pubData.publicUrl
+        }
+      }
+    } catch (err) {
+      console.warn('⚠️ Failed to get URL from storage:', err)
+    }
+    return null
+  }
+
+  // For PDF documents, check media_url - might be a direct URL or storage path
+  if (isPdfDoc && doc.media_url && typeof doc.media_url === 'string') {
+    const mediaUrl = doc.media_url as string
+    
+    // If it's a direct URL (http, https, data, blob), use it
+    if (
+      mediaUrl.startsWith('http://') ||
+      mediaUrl.startsWith('https://') ||
+      mediaUrl.startsWith('data:') ||
+      mediaUrl.startsWith('blob:')
+    ) {
+      console.log('✅ Using media_url as direct URL for PDF:', mediaUrl)
+      return mediaUrl
+    }
+    
+    // If it looks like a storage path, try to get signed URL
+    if (isStoragePath(mediaUrl)) {
+      const signedUrl = await getSignedUrlFromPath(mediaUrl)
+      if (signedUrl) {
+        return signedUrl
+      }
+      // If signed URL failed but it's a storage path, log for debugging
+      console.warn('⚠️ Storage path found but could not get signed URL:', mediaUrl)
+    }
+    
+    // For PDF selections, also accept URLs that contain .pdf
+    if (isPdfSelection && mediaUrl.toLowerCase().includes('.pdf')) {
+      console.log('✅ Using media_url for PDF selection (contains .pdf):', mediaUrl)
+      return mediaUrl
+    }
+  }
+
+  // Check content field - might contain PDF URL or data URL
+  if (doc.content && typeof doc.content === 'string') {
+    const content = doc.content as string
+    // Check if content is a PDF URL
+    if (
+      (content.startsWith('http://') || content.startsWith('https://') || content.startsWith('blob:')) &&
+      (content.toLowerCase().includes('.pdf') || isPdfDoc)
+    ) {
+      console.log('✅ Using content as PDF URL:', content)
+      return content
+    }
+    // Check if content is a data URL PDF
+    if (content.startsWith('data:application/pdf') || content.startsWith('data:application/octet-stream')) {
+      console.log('✅ Using content as PDF data URL')
+      return content
+    }
+    // Check if content is a storage path
+    if (isStoragePath(content)) {
+      const signedUrl = await getSignedUrlFromPath(content)
+      if (signedUrl) {
+        return signedUrl
+      }
+    }
+  }
+
+  // Check if we have a storage_object_path for PDFs - need to get signed URL
+  if (isPdfDoc && doc.storage_object_path) {
+    const signedUrl = await getSignedUrlFromPath(doc.storage_object_path)
+    if (signedUrl) {
+      return signedUrl
+    }
+  }
+
+  // Fallback: if the main URL looks like a PDF link, use that
+  if (doc.url && typeof doc.url === 'string') {
+    const url = doc.url as string
+    // Check if it's a direct URL
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('blob:')) {
+      if (url.toLowerCase().includes('.pdf') || isPdfDoc) {
+        console.log('✅ Using URL as PDF:', url)
+        return url
+      }
+    }
+    // Check if it's a storage path
+    if (isStoragePath(url)) {
+      const signedUrl = await getSignedUrlFromPath(url)
+      if (signedUrl) {
+        return signedUrl
+      }
+    }
+  }
+
+  // Last resort: check metadata.sourceUrl
+  if (metadata && typeof metadata.sourceUrl === 'string' && metadata.sourceUrl) {
+    const sourceUrl = metadata.sourceUrl
+    // Check if it's a direct URL
+    if (
+      sourceUrl.startsWith('http://') ||
+      sourceUrl.startsWith('https://') ||
+      sourceUrl.startsWith('blob:')
+    ) {
+      if (sourceUrl.toLowerCase().includes('.pdf') || isPdfDoc) {
+        console.log('✅ Using sourceUrl from metadata as PDF URL:', sourceUrl)
+        return sourceUrl
+      }
+    }
+    // Check if it's a storage path
+    if (isStoragePath(sourceUrl)) {
+      const signedUrl = await getSignedUrlFromPath(sourceUrl)
+      if (signedUrl) {
+        return signedUrl
+      }
+    }
+  }
+
+  console.warn('⚠️ No PDF URL found for document:', doc.id, {
+    type: doc.type,
+    media_url: doc.media_url,
+    storage_object_path: doc.storage_object_path,
+    url: doc.url,
+    hasMetadata: !!metadata,
+    metadataSourceUrl: metadata?.sourceUrl
+  })
+  return null
+}
+
+async function openSavedItem(doc: any) {
+  // Images already open a dedicated viewer on thumbnail click
+  if (doc.type === 'image' && getImageUrlForDoc(doc.id)) {
+    openImageViewer(doc.id)
+    return
+  }
+
+  // Open full PDF in viewer
+  if (doc.type === 'pdf') {
+    const pdfUrl = await getPdfUrlFromDoc(doc)
+    // Parse metadata to get sourceUrl
+    let metadata = doc.metadata
+    if (typeof metadata === 'string') {
+      try {
+        metadata = JSON.parse(metadata)
+      } catch (e) {
+        // Ignore parse errors
+      }
+    }
+    const sourceUrl = (metadata && metadata.sourceUrl) || (doc.url && doc.url.toLowerCase().includes('.pdf') ? doc.url : null) || pdfUrl
+
+    if (pdfUrl && typeof chrome !== 'undefined' && chrome.runtime?.sendMessage) {
+      console.log('📄 Opening PDF in viewer:', { pdfUrl, sourceUrl })
+      chrome.runtime.sendMessage(
+        {
+          action: 'openPDFViewer',
+          pdfUrl,
+          sourceUrl
+        },
+        (response) => {
+          if (chrome.runtime.lastError) {
+            console.error('❌ Error opening PDF viewer:', chrome.runtime.lastError)
+            // Only fallback to URL if it's actually a PDF URL
+            if (doc.url && doc.url.toLowerCase().includes('.pdf')) {
+              openDocumentLink(doc)
+            } else {
+              alert('Failed to open PDF viewer. PDF URL not found.')
+            }
+          } else if (response && !response.success) {
+            console.error('❌ Failed to open PDF viewer:', response.error)
+            // Only fallback to URL if it's actually a PDF URL
+            if (doc.url && doc.url.toLowerCase().includes('.pdf')) {
+              openDocumentLink(doc)
+            } else {
+              alert('Failed to open PDF viewer: ' + (response.error || 'Unknown error'))
+            }
+          }
+        }
+      )
+      return
+    }
+
+    // Fallback: only open URL if it's actually a PDF URL
+    console.warn('⚠️ No PDF URL found')
+    
+    // Try one more time with more detailed logging
+    console.log('🔍 Document details for debugging:', {
+      id: doc.id,
+      type: doc.type,
+      media_url: doc.media_url,
+      storage_object_path: doc.storage_object_path,
+      url: doc.url,
+      metadata: doc.metadata
+    })
+    
+    if (doc.url && doc.url.toLowerCase().includes('.pdf')) {
+      console.log('⚠️ Falling back to doc.url (contains .pdf):', doc.url)
+      openDocumentLink(doc)
+    } else {
+      // More helpful error message
+      const errorMsg = `Cannot open PDF: PDF URL not found in document.\n\nDocument ID: ${doc.id}\nType: ${doc.type}\nMedia URL: ${doc.media_url || 'N/A'}\nStorage Path: ${doc.storage_object_path || 'N/A'}`
+      console.error('❌', errorMsg)
+      alert(errorMsg)
+    }
+    return
+  }
+
+  // PDF text selections (saved from PDF viewer)
+  const isPdfSelection =
+    Array.isArray(doc.tags) && doc.tags.includes('pdf-selection')
+
+  if (isPdfSelection) {
+    const pdfUrl = await getPdfUrlFromDoc(doc)
+    // Parse metadata to get sourceUrl
+    let metadata = doc.metadata
+    if (typeof metadata === 'string') {
+      try {
+        metadata = JSON.parse(metadata)
+      } catch (e) {
+        // Ignore parse errors
+      }
+    }
+    const sourceUrl = (metadata && metadata.sourceUrl) || (doc.url && doc.url.toLowerCase().includes('.pdf') ? doc.url : null) || pdfUrl
+
+    if (pdfUrl && typeof chrome !== 'undefined' && chrome.runtime?.sendMessage) {
+      console.log('📄 Opening PDF selection in viewer:', { pdfUrl, sourceUrl })
+      chrome.runtime.sendMessage(
+        {
+          action: 'openPDFViewer',
+          pdfUrl,
+          sourceUrl
+        },
+        (response) => {
+          if (chrome.runtime.lastError) {
+            console.error('❌ Error opening PDF viewer:', chrome.runtime.lastError)
+            // Only fallback to URL if it's actually a PDF URL
+            if (doc.url && doc.url.toLowerCase().includes('.pdf')) {
+              openDocumentLink(doc)
+            } else {
+              alert('Failed to open PDF viewer. PDF URL not found.')
+            }
+          } else if (response && !response.success) {
+            console.error('❌ Failed to open PDF viewer:', response.error)
+            // Only fallback to URL if it's actually a PDF URL
+            if (doc.url && doc.url.toLowerCase().includes('.pdf')) {
+              openDocumentLink(doc)
+            } else {
+              alert('Failed to open PDF viewer: ' + (response.error || 'Unknown error'))
+            }
+          }
+        }
+      )
+      return
+    }
+
+    // Fallback: only open URL if it's actually a PDF URL
+    console.warn('⚠️ No PDF URL found for selection')
+    
+    // Try one more time with more detailed logging
+    console.log('🔍 Document details for debugging:', {
+      id: doc.id,
+      type: doc.type,
+      media_url: doc.media_url,
+      storage_object_path: doc.storage_object_path,
+      url: doc.url,
+      metadata: doc.metadata,
+      tags: doc.tags
+    })
+    
+    if (doc.url && doc.url.toLowerCase().includes('.pdf')) {
+      console.log('⚠️ Falling back to doc.url (contains .pdf):', doc.url)
+      openDocumentLink(doc)
+    } else {
+      // More helpful error message
+      const errorMsg = `Cannot open PDF: PDF URL not found in document metadata.\n\nDocument ID: ${doc.id}\nType: ${doc.type}\nMedia URL: ${doc.media_url || 'N/A'}\nStorage Path: ${doc.storage_object_path || 'N/A'}`
+      console.error('❌', errorMsg)
+      alert(errorMsg)
+    }
+    return
+  }
+
+  // Default behaviour: open associated link if present
+  if (doc.url) {
+    openDocumentLink(doc)
+  }
+}
+
+async function addToEditor(doc: any) {
+  // Switch to editor tab if not already there
+  if (chatActiveTab.value !== 'edra') {
+    chatActiveTab.value = 'edra'
+    await nextTick()
+  }
+
+  // Wait a bit more to ensure editor is fully mounted
+  await nextTick()
+
+  if (!edraEditorRef.value) {
+    console.warn('Editor not available')
+    return
+  }
+
+  if (doc.type === 'text') {
+    // Add text content at cursor position
+    const textContent = doc.content || doc.notes || ''
+    if (textContent) {
+      // Split by newlines and create paragraphs
+      const paragraphs = textContent.split('\n').filter((p: string) => p.trim())
+      if (paragraphs.length > 0) {
+        const htmlContent = paragraphs.map((p: string) => `<p>${p}</p>`).join('')
+        edraEditorRef.value.insertContent(htmlContent)
+      }
+    }
+  } else if (doc.type === 'image' || doc.type === 'screenshot') {
+    // Add image at cursor position
+    const imageUrl = getImageUrlForDoc(doc.id)
+    if (imageUrl) {
+      const altText = doc.title || 'Image'
+      edraEditorRef.value.insertImage(imageUrl, altText)
+    }
+  }
+}
+
+function handleClickOutside(e: MouseEvent) {
+  const target = e.target as HTMLElement
+  if (!target.closest('[data-doc-menu]')) {
+    docMenuOpen.value = null
+  }
+  if (!target.closest('[data-block-context-menu]') && !target.closest('.block-context-menu')) {
+    blockContextMenu.value.open = false
+  }
+}
+
+function handleBlockContextMenu(event: MouseEvent) {
+  const target = event.target as HTMLElement
+  
+  // Find the closest block element (p, table, ul, ol, blockquote, h1-h6, pre)
+  const blockElements = ['p', 'table', 'ul', 'ol', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'pre']
+  let blockElement: HTMLElement | null = null
+  
+  for (const tag of blockElements) {
+    blockElement = target.closest(tag)
+    if (blockElement) break
+  }
+  
+  // If clicked on a table, get the table wrapper
+  if (!blockElement && target.closest('.table-wrapper')) {
+    blockElement = target.closest('.table-wrapper') as HTMLElement
+  }
+  
+  // Also check if clicked inside markdown-content
+  const markdownContainer = target.closest('.markdown-content')
+  if (!markdownContainer) return
+  
+  // Find the message index from the parent
+  const messageContainer = markdownContainer.closest('[data-message-index]')
+  const messageIndex = messageContainer ? parseInt(messageContainer.getAttribute('data-message-index') || '0') : 0
+  
+  if (blockElement) {
+    event.preventDefault()
+    event.stopPropagation()
+    blockContextMenu.value = {
+      open: true,
+      x: event.clientX,
+      y: event.clientY,
+      content: blockElement.outerHTML,
+      messageIndex
+    }
+  }
+}
+
+async function addBlockToEditor() {
+  if (!blockContextMenu.value.content) return
+  
+  // Switch to editor tab if not already there
+  if (chatActiveTab.value !== 'edra') {
+    chatActiveTab.value = 'edra'
+    await nextTick()
+  }
+  
+  // Wait for editor to be fully mounted and visible
+  await nextTick()
+  await new Promise(resolve => setTimeout(resolve, 100))
+  
+  if (!edraEditorRef.value || !edraEditorRef.value.editor) {
+    console.warn('Editor not available')
+    return
+  }
+  
+  // Focus the editor first to ensure cursor position is active
+  edraEditorRef.value.editor.chain().focus().run()
+  
+  // Wait a bit for focus to be established
+  await new Promise(resolve => setTimeout(resolve, 50))
+  
+  // Insert the block content at cursor position
+  edraEditorRef.value.insertContent(blockContextMenu.value.content)
+  blockContextMenu.value.open = false
+}
+
+async function copyBlockContent() {
+  if (!blockContextMenu.value.content) return
+  
+  try {
+    // Create a temporary element to extract text
+    const tempDiv = document.createElement('div')
+    tempDiv.innerHTML = blockContextMenu.value.content
+    const textContent = tempDiv.textContent || tempDiv.innerText || ''
+    
+    await navigator.clipboard.writeText(textContent)
+    blockContextMenu.value.open = false
+    
+    // Show a brief success feedback (optional)
+    // You could add a toast notification here
+  } catch (err) {
+    console.error('Failed to copy:', err)
+  }
+}
+
+// Auto-save editor content with debouncing
+async function saveEditorContent() {
+  if (isSavingEditor.value) return
+  
+  isSavingEditor.value = true
+  try {
+    // Update scribe with editor content
+    // Note: This assumes the database has an editor_content column
+    // If not, you'll need to add a migration first
+    await databaseService.updateScribe(props.scribeId, {
+      editor_content: edraContent.value
+    } as any)
+    console.log('✅ Editor content saved')
+  } catch (error: any) {
+    console.error('❌ Failed to save editor content:', error)
+    // If the column doesn't exist, we'll get an error but won't break the app
+  } finally {
+    isSavingEditor.value = false
+  }
+}
+
+// Watch for editor content changes and auto-save with debounce
+watch(edraContent, () => {
+  // Clear existing timeout
+  if (saveEditorTimeout) {
+    clearTimeout(saveEditorTimeout)
+  }
+  
+  // Set new timeout to save after 2 seconds of inactivity
+  saveEditorTimeout = setTimeout(() => {
+    saveEditorContent()
+  }, 2000)
+})
 
 function openDocumentLink(doc: any) {
   if (doc.url) {
@@ -1363,10 +2216,10 @@ md.renderer.rules.tbody_close = () => {
 
 // Custom table cell renderers with inline styles to ensure borders show
 md.renderer.rules.th_open = () => {
-  return '<th class="table-header" style="border: 1px solid rgba(148, 163, 184, 0.3);">'
+  return '<th class="table-header" style="border: 1px solid rgba(148, 163, 184, 0.3); padding: 0.5rem 0.5rem !important;">'
 }
 md.renderer.rules.td_open = () => {
-  return '<td class="table-cell" style="border: 1px solid rgba(148, 163, 184, 0.3);">'
+  return '<td class="table-cell" style="border: 1px solid rgba(148, 163, 184, 0.3); padding: 0.75rem 0.75rem !important;">'
 }
 
 // Note: markdown-it automatically processes inline markdown in table cells
@@ -1401,12 +2254,12 @@ md.renderer.rules.heading_open = (tokens: any[], idx: number) => {
   const token = tokens[idx]
   const level = token.tag.slice(1) // 'h1' -> '1'
   const sizes: Record<string, string> = {
-    '1': 'text-xl font-bold text-foreground mt-7 mb-4',
-    '2': 'text-lg font-semibold text-foreground mt-6 mb-3',
-    '3': 'text-base font-semibold text-foreground mt-5 mb-2',
-    '4': 'text-sm font-semibold text-foreground mt-4 mb-2',
-    '5': 'text-sm font-semibold text-foreground mt-4 mb-2',
-    '6': 'text-xs font-semibold text-foreground mt-3 mb-2'
+    '1': 'text-2xl font-bold text-foreground mt-7 mb-4',
+    '2': 'text-xl font-semibold text-foreground mt-6 mb-3',
+    '3': 'text-lg font-semibold text-foreground mt-5 mb-2',
+    '4': 'text-base font-semibold text-foreground mt-4 mb-2',
+    '5': 'text-base font-semibold text-foreground mt-4 mb-2',
+    '6': 'text-sm font-semibold text-foreground mt-3 mb-2'
   }
   const className = sizes[level] || sizes['3']
   return `<${token.tag} class="${className}">`
@@ -1837,8 +2690,7 @@ function escapeHtml(text: string): string {
 }
 
 .markdown-content .markdown-table td.table-cell {
-  padding: 0.875rem 1rem !important;
-  padding-left: 0.5rem !important;
+  padding: 1rem 1rem !important;
   color: hsl(var(--foreground)) !important;
   line-height: 1.5;
   font-size: 0.8125rem;

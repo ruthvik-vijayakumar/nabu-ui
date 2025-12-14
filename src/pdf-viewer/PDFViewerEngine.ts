@@ -165,24 +165,36 @@ export class PDFViewerEngine {
       if (!textLayer) {
         textLayer = document.createElement('div')
         textLayer.className = 'textLayer'
+        textLayer.id = `textLayer-${pageNum}`
         // Insert text layer right after canvas
         canvas.parentNode?.insertBefore(textLayer, canvas.nextSibling)
       }
 
+      // Ensure text layer is properly positioned and sized
+      textLayer.style.position = 'absolute'
+      textLayer.style.top = '0'
+      textLayer.style.left = '0'
       textLayer.style.width = `${viewport.width}px`
       textLayer.style.height = `${viewport.height}px`
+      textLayer.style.zIndex = '3'
 
       let annotationLayer = pageWrapper.querySelector('.page-annotation-layer') as HTMLElement | null
       if (!annotationLayer) {
         annotationLayer = document.createElement('div')
         annotationLayer.className = 'page-annotation-layer'
+        annotationLayer.id = `annotationLayer-${pageNum}`
         // Insert annotation layer after text layer (or after canvas if no text layer)
         const insertAfter = textLayer || canvas
         insertAfter.parentNode?.insertBefore(annotationLayer, insertAfter.nextSibling)
       }
 
+      // Ensure annotation layer is properly positioned
+      annotationLayer.style.position = 'absolute'
+      annotationLayer.style.top = '0'
+      annotationLayer.style.left = '0'
       annotationLayer.style.width = `${viewport.width}px`
       annotationLayer.style.height = `${viewport.height}px`
+      annotationLayer.style.zIndex = '4'
       this.pageLayers.set(pageNum, annotationLayer)
       
       const context = canvas.getContext('2d')
@@ -381,29 +393,52 @@ export class PDFViewerEngine {
 
   private applyLayerInteractivity(layer: HTMLElement) {
     const pageWrapper = layer.closest('.pdf-page-wrapper') as HTMLElement | null
-    const textLayer = pageWrapper?.querySelector('.textLayer') as HTMLElement | null
+    if (!pageWrapper) return
+    
+    const textLayer = pageWrapper.querySelector('.textLayer') as HTMLElement | null
+    const textLayerItems = pageWrapper.querySelectorAll('.textLayer-item') as NodeListOf<HTMLElement>
     
     if (this.currentTool === 'select') {
       layer.classList.remove('active')
       layer.classList.add('select-mode')
       layer.style.pointerEvents = 'none'
+      layer.style.zIndex = '1'
+      
       // Enable text selection when in select mode
       if (textLayer) {
         textLayer.style.pointerEvents = 'auto'
         textLayer.style.userSelect = 'text'
+        textLayer.style.zIndex = '3'
       }
+      
+      // Enable all text items for selection
+      textLayerItems.forEach(item => {
+        item.style.pointerEvents = 'auto'
+        item.style.userSelect = 'text'
+      })
+      
       if (pageWrapper) {
         pageWrapper.classList.remove('annotation-mode')
       }
-      } else {
+    } else {
       layer.classList.add('active')
       layer.classList.remove('select-mode')
       layer.style.pointerEvents = 'auto'
+      layer.style.zIndex = '4'
+      
       // Disable text selection when annotation tools are active
       if (textLayer) {
         textLayer.style.pointerEvents = 'none'
         textLayer.style.userSelect = 'none'
+        textLayer.style.zIndex = '2'
       }
+      
+      // Disable all text items
+      textLayerItems.forEach(item => {
+        item.style.pointerEvents = 'none'
+        item.style.userSelect = 'none'
+      })
+      
       if (pageWrapper) {
         pageWrapper.classList.add('annotation-mode')
       }
